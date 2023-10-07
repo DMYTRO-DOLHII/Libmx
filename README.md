@@ -8,7 +8,6 @@ libmx is a custom C library developed to provide a wide range of useful function
 - [Usage](#usage)
 - [How to Compile](#how-to-compile)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Description
 libmx contains a collection of functions for string manipulation, memory management, sorting algorithms, and more. It is designed to simplify C programming by providing efficient and reliable implementations of common operations.
