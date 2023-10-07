@@ -21,7 +21,7 @@ The library includes functions such as:
 - `mx_bubble_sort` - Sort an array using the bubble sort algorithm.
 - ...and many more.
 
-For a complete list of functions, refer to the [documentation](#documentation).
+For a complete list of functions, refer to the [code](https://github.com/DMYTRO-DOLHII/Libmx/tree/master/src).
 
 ## Usage
 To use libmx in your C projects, include the `libmx.h` header file in your source files.
