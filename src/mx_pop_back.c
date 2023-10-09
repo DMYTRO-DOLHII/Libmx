@@ -1,22 +1,22 @@
 #include <libmx.h>
 
 void mx_pop_back(t_list **head) {
-    t_list *last = *head;
-    t_list *present = *head;
+    t_list *current;
 
-    if (*head == NULL)
+    if (head == NULL || *head == NULL)
         return;
 
-    if (present -> next == NULL) {
-        free(*head);
-        *head= NULL;
+    current = *head;
+
+    if (current->next == NULL) {
+        free(current);
+        *head = NULL;
         return;
     }
 
-    while (present -> next != NULL) {
-        last = present;
-        present = present -> next;
-    }
-    last -> next = NULL;
-    free(present);
+    while (current->next->next != NULL)
+        current = current->next;
+
+    free(current->next);
+    current->next = NULL;
 }

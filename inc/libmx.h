@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <fcntl.h>
-#include <malloc/malloc.h>
+// #include <malloc/malloc.h>
 
 void mx_printchar(char c);
 int mx_strlen(const char *s);
@@ -34,6 +34,7 @@ char *mx_strndup(const char *s1, size_t n);
 char *mx_strcpy(char *dst, const char *src);
 char *mx_strncpy(char *dst, const char *src, int len);
 char *mx_strcat(char *restrict s1, const char *restrict s2);
+int mx_strncmp(const char *s1, const char *s2, int n);
 char *mx_strstr(const char *haystack, const char *needle);
 int mx_get_substr_index(const char *str, const char *sub);
 int mx_count_substr(const char *str, const char *sub);
