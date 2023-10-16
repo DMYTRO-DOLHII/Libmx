@@ -1,28 +1,34 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -Iinc
+CC = clang
+CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic
 
-SRC_DIR = src
-OBJ_DIR = obj
+INCDIR = inc
+SRCDIR = src
+OBJDIR = obj
 
-SRCS = $(wildcard $(SRC_DIR)/*.c)
-OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
+SRCFS := $(wildcard $(SRCDIR)/*.c)
+OBJFS := $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRCFS))
 
-LIBRARY = libmx.a
+LIB = libmx.a
 
-all: $(LIBRARY)
+.PHONY: all install uninstall clean reinstall
 
-$(LIBRARY): $(OBJS)
-	ar rcs $(LIBRARY) $(OBJS)
+all: install
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+install: $(LIB)
 
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+$(LIB): $(OBJDIR) $(OBJFS)
+	ar rsc $(LIB) $(OBJFS)
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+$(OBJDIR)/%.o:$(SRCDIR)/%.c
+	$(CC) $(CFLAGS) -I $(INCDIR) -c $< -o $@
+
+uninstall: clean
+	rm -f $(LIB)
 
 clean:
-	rm -rf $(OBJ_DIR) $(LIBRARY)
+	rm -rf $(OBJDIR)
 
-re: clean all
-
-.PHONY: all clean re
+reinstall: uninstall all
