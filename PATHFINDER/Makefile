@@ -1,6 +1,6 @@
 NAME	=	pathfinder
 
-CC 	= 	clang
+CC 	= 	gcc
 CFLAGS	=	-std=c11 -Wall -Wextra -Werror -Wpedantic
 
 SRCDIR	=	src
