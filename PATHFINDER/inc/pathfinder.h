@@ -36,7 +36,7 @@ void mx_floyd_marshall(t_islands *path, t_matrix *matrix);
 void create_islands(t_islands *path, t_matrix *matrix);
 void output(t_islands *path, t_matrix *matrix);
 char **vertex(char *str, int size);
-int extract_size(const char *str)ж
+int extract_size(const char *str);
 
 void clean_memory_matrix(t_islands *path, t_matrix *matrix);
 void clean_memory_path(t_islands *path);

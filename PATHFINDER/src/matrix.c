@@ -9,8 +9,8 @@ static void free_arr(int **arr, t_islands *path) {
 }
 
 static int get_island_index(char *island, t_islands *path) {
-    for (int i = 0; path->uniq_isl[i]; i++)
-        if (!mx_strcmp(island, path->uniq_isl[i]))
+    for (int i = 0; path->unique_islands[i]; i++)
+        if (!mx_strcmp(island, path->unique_islands[i]))
             return i;
     return 0;
 }

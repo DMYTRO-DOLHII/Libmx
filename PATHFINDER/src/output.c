@@ -1,5 +1,10 @@
 #include "../inc/pathfinder.h"
 
+static void mx_print_result(void) {
+    for (int i = 0; i++ < 40; mx_printstr("="));
+    mx_printstr("\n");
+}
+
 static bool validate_path(t_matrix *matrix, int k) {
     int i = matrix->route[matrix->len];
     int j = matrix->route[0];
@@ -12,9 +17,9 @@ static bool validate_path(t_matrix *matrix, int k) {
 static void print_path_route(t_islands *path, t_matrix *matrix) {
     mx_print_result();
     mx_printstr("Path: ");
-    mx_printstr(path->uniq_isl[matrix->route[1]]);
+    mx_printstr(path->unique_islands[matrix->route[1]]);
     mx_printstr(" -> ");
-    mx_printstr(path->uniq_isl[matrix->route[matrix->len]]);
+    mx_printstr(path->unique_islands[matrix->route[matrix->len]]);
     mx_printstr("\n");
     mx_printstr("Route: ");
     for (int i = 1; i < matrix->len + 1; ) {
@@ -43,7 +48,7 @@ static void print_distance(t_matrix *matrix) {
 }
 
 static void print_path(t_islands *path, t_matrix *matrix) {
-    for (int k = 0; k < path->num_islands; k++) {
+    for (int k = 0; k < path->n_islands; k++) {
         if (k != matrix->route[matrix->len]
             && validate_path(matrix, k)) {
             matrix->route[++matrix->len] = k;
@@ -57,15 +62,10 @@ static void print_path(t_islands *path, t_matrix *matrix) {
     print_distance(matrix);
 }
 
-static void mx_print_result(void) {
-    for (int i = 0; i++ < 40; mx_printstr("="));
-    mx_printstr("\n");
-}
-
 void output(t_islands *path, t_matrix *matrix) {
-    for (int i = 0; i < path->num_islands; i++) {
-        for (int j = i + 1; j < path->num_islands; j++) {
-            matrix->route = (int *)malloc(sizeof(int) * (path->num_islands));
+    for (int i = 0; i < path->n_islands; i++) {
+        for (int j = i + 1; j < path->n_islands; j++) {
+            matrix->route = (int *)malloc(sizeof(int) * (path->n_islands));
             matrix->len = 1;
             matrix->route[0] = j;
             matrix->route[matrix->len] = i;

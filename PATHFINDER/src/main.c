@@ -1,14 +1,14 @@
 #include "../inc/pathfinder.h"
 
 static void errors(int argc, char *argv[]) {
-    usage_error(argc)
-	file_not_found(argv[1])
-	empty_file(argv[1])
-	invalid_first_line(argv[1])
-	invalid_line(argv[1])
-	invalid_islands(argv[1])
-	duplicate_bridges(argv[1])
-	lengths_sum(argv[1])
+    usage_error(argc);
+	file_not_found(argv[1]);
+	empty_file(argv[1]);
+	invalid_first_line(argv[1]);
+	invalid_line(argv[1]);
+	invalid_islands(argv[1]);
+	duplicate_bridges(argv[1]);
+	lengths_sum(argv[1]);
 }
 
 int main(int argc, char *argv[]) {
