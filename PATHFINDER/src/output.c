@@ -23,7 +23,7 @@ static void print_path_route(t_islands *path, t_matrix *matrix) {
     mx_printstr("\n");
     mx_printstr("Route: ");
     for (int i = 1; i < matrix->len + 1; ) {
-        mx_printstr(path->uniq_isl[matrix->route[i]]);
+        mx_printstr(path->unique_islands[matrix->route[i]]);
         ++i < matrix->len + 1 ? mx_printstr(" -> ") : mx_printstr("");
     }
     mx_printstr("\n");
