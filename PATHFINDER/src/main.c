@@ -40,7 +40,7 @@ Graph* create_graph(int num_vertices) {
     return graph;
 }
 
-void add_edge(Graph *graph, Edge edge, Island *islands) {
+void add_edge(Graph *graph, Edge edge) {
     int start_index = edge.start[0] - 'A';
     int end_index = edge.end[0] - 'A';
 
@@ -93,7 +93,7 @@ int main() {
         edge.end = mx_strndup(dash_pos + 1, end_len);
         edge.weight = mx_atoi(comma_pos + 1);
 
-        add_edge(graph, edge, islands);
+        add_edge(graph, edge);
 
         free(edge.start);
         free(edge.end);
