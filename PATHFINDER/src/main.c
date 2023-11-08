@@ -18,7 +18,11 @@ Graph* create_graph(int num_vertices) {
 
     for (int i = 0; i < num_vertices; ++i) {
         graph->adj_matrix[i] = (int*)malloc(num_vertices * sizeof(int));
-        memset(graph->adj_matrix[i], 0, num_vertices * sizeof(int));
+
+        // Initialize matrix elements to 0 manually
+        for (int j = 0; j < num_vertices; ++j) {
+            graph->adj_matrix[i][j] = 0;
+        }
     }
 
     return graph;
@@ -26,14 +30,14 @@ Graph* create_graph(int num_vertices) {
 
 Edge parse_edge(char *line) {
     Edge edge;
-    char *token = strtok(line, "-,");
-    edge.start_vertex = atoi(token);
+    char *token = mx_strtok(line, "-,");
+    edge.start_vertex = mx_atoi(token);
 
-    token = strtok(NULL, "-,");
-    edge.end_vertex = atoi(token);
+    token = mx_strtok(NULL, "-,");
+    edge.end_vertex = mx_atoi(token);
 
-    token = strtok(NULL, "-,");
-    edge.weight = atoi(token);
+    token = mx_strtok(NULL, "-,");
+    edge.weight = mx_atoi(token);
 
     return edge;
 }
@@ -62,20 +66,27 @@ void print_shortest_paths(Graph *graph) {
     for (int i = 0; i < graph->num_vertices; ++i) {
         for (int j = i + 1; j < graph->num_vertices; ++j) {
             if (graph->adj_matrix[i][j] != 0) {
-                printf("========================================\n");
-                printf("Path: %d -> %d\n", i, j);
-                printf("Route: %d", i);
+                mx_printstr("========================================\n");
+                mx_printstr("Path: ");
+                mx_printint(i);
+                mx_printstr(" -> ");
+                mx_printint(j);
+                mx_printstr("\nRoute: ");
+                mx_printint(i);
                 int next_vertex = i;
                 while (next_vertex != j) {
                     for (int k = 0; k < graph->num_vertices; ++k) {
                         if (graph->adj_matrix[next_vertex][j] == graph->adj_matrix[next_vertex][k] + graph->adj_matrix[k][j]) {
                             next_vertex = k;
-                            printf(" -> %d", k);
+                            mx_printstr(" -> ");
+                            mx_printint(k);
                             break;
                         }
                     }
                 }
-                printf("\nDistance: %d\n", graph->adj_matrix[i][j]);
+                mx_printstr("\nDistance: ");
+                mx_printint(graph->adj_matrix[i][j]);
+                mx_printchar('\n');
             }
         }
     }
