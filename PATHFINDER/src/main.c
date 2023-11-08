@@ -16,13 +16,6 @@ typedef struct {
     int weight;
 } Edge;
 
-void mx_printstr(const char *str) {
-    while (*str) {
-        putchar(*str);
-        ++str;
-    }
-}
-
 Island* create_island(const char *name, int index) {
     Island *island = (Island*)malloc(sizeof(Island));
     island->name = mx_strdup(name);
@@ -58,7 +51,6 @@ void print_graph(Graph *graph, Island *islands) {
     for (int i = 0; i < graph->num_vertices; ++i) {
         for (int j = 0; j < graph->num_vertices; ++j) {
             char num_str[12]; // Assuming bridge length can be represented in 11 characters
-            snprintf(num_str, sizeof(num_str), "%d ", graph->adj_matrix[i][j]);
             mx_printstr(num_str);
         }
         mx_printstr("\n");
@@ -68,7 +60,7 @@ void print_graph(Graph *graph, Island *islands) {
 int main() {
     char input[] = "8\nKyiv-Kharkiv,471\nNikopol-Kharkiv,340\nKyiv-Warsaw,766\nKyiv-Paris,2403\nKyiv-Prague,1141\nKyiv-Singapore,11864\nKyiv-Tokyo,11079\n";
 
-    char *line = strtok(input, "\n");
+    char *line = mx_strtok(input, "\n");
     int num_islands = atoi(line);
 
     Island islands[num_islands];
