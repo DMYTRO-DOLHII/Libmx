@@ -1,17 +1,34 @@
 #include "../inc/pathfinder.h"
 
 typedef struct {
+    char *name;
+    int index;
+} Island;
+
+typedef struct {
     int num_vertices;
-    Edge **adj_matrix;
+    int **adj_matrix;
 } Graph;
 
 typedef struct {
-    char *start_vertex_name;
-    char *end_vertex_name;
-    int start_vertex;
-    int end_vertex;
+    char *start;
+    char *end;
     int weight;
 } Edge;
+
+void mx_printstr(const char *str) {
+    while (*str) {
+        putchar(*str);
+        ++str;
+    }
+}
+
+Island* create_island(const char *name, int index) {
+    Island *island = (Island*)malloc(sizeof(Island));
+    island->name = strdup(name);
+    island->index = index;
+    return island;
+}
 
 Graph* create_graph(int num_vertices) {
     Graph *graph = (Graph*)malloc(sizeof(Graph));
@@ -30,126 +47,67 @@ Graph* create_graph(int num_vertices) {
     return graph;
 }
 
-Edge parse_edge(char *line) {
-    Edge edge;
-    char *token = mx_strtok(line, "-,");
-    edge.start_vertex_name = strdup(token);
-    edge.start_vertex = mx_atoi(token);
-
-    token = mx_strtok(NULL, "-,");
-    edge.end_vertex_name = strdup(token);
-    edge.end_vertex = mx_atoi(token);
-
-    token = mx_strtok(NULL, "-,");
-    edge.weight = mx_atoi(token);
-
-    return edge;
+void add_edge(Graph *graph, Edge edge, Island *islands) {
+    int start_index = islands[edge.start[0] - 'A'].index;
+    int end_index = islands[edge.end[0] - 'A'].index;
+    graph->adj_matrix[start_index][end_index] = edge.weight;
+    graph->adj_matrix[end_index][start_index] = edge.weight;
 }
 
-void add_edge(Graph *graph, Edge edge) {
-    graph->adj_matrix[edge.start_vertex][edge.end_vertex] = edge.weight;
-    graph->adj_matrix[edge.end_vertex][edge.start_vertex] = edge.weight;
-}
-
-void floyd_warshall(Graph *graph) {
-    for (int k = 0; k < graph->num_vertices; ++k) {
-        for (int i = 0; i < graph->num_vertices; ++i) {
-            for (int j = 0; j < graph->num_vertices; ++j) {
-                if (graph->adj_matrix[i][k] != 0 && graph->adj_matrix[k][j] != 0) {
-                    int new_dist = graph->adj_matrix[i][k] + graph->adj_matrix[k][j];
-                    if (graph->adj_matrix[i][j] == 0 || new_dist < graph->adj_matrix[i][j]) {
-                        graph->adj_matrix[i][j] = new_dist;
-                    }
-                }
-            }
+void print_graph(Graph *graph, Island *islands) {
+    for (int i = 0; i < graph->num_vertices; ++i) {
+        for (int j = 0; j < graph->num_vertices; ++j) {
+            char num_str[12]; // Assuming bridge length can be represented in 11 characters
+            snprintf(num_str, sizeof(num_str), "%d ", graph->adj_matrix[i][j]);
+            mx_printstr(num_str);
         }
+        mx_printstr("\n");
     }
 }
 
-void print_shortest_paths(Graph *graph) {
-    for (int i = 0; i < graph->num_vertices; ++i) {
-        for (int j = i + 1; j < graph->num_vertices; ++j) {
-            if (graph->adj_matrix[i][j] != 0) {
-                mx_printstr("========================================\n");
-                mx_printstr("Path: ");
-                mx_printstr(graph->adj_matrix[i][j]->start_vertex_name);
-                mx_printstr(" -> ");
-                mx_printstr(graph->adj_matrix[i][j]->end_vertex_name);
-                mx_printstr("\nRoute: ");
-                mx_printint(i);
-                int next_vertex = i;
-                while (next_vertex != j) {
-                    for (int k = 0; k < graph->num_vertices; ++k) {
-                        if (graph->adj_matrix[next_vertex][j] == graph->adj_matrix[next_vertex][k] + graph->adj_matrix[k][j]) {
-                            next_vertex = k;
-                            mx_printstr(" -> ");
-                            mx_printint(k);
-                            break;
-                        }
-                    }
-                }
-                mx_printstr("\nDistance: ");
-                mx_printint(graph->adj_matrix[i][j]);
-                mx_printchar('\n');
-            }
-        }
-    }
-}
+int main() {
+    char input[] = "8\nKyiv-Kharkiv,471\nNikopol-Kharkiv,340\nKyiv-Warsaw,766\nKyiv-Paris,2403\nKyiv-Prague,1141\nKyiv-Singapore,11864\nKyiv-Tokyo,11079\n";
 
-void free_graph(Graph *graph) {
-    for (int i = 0; i < graph->num_vertices; ++i) {
-        free(graph->adj_matrix[i]->start_vertex_name);
-        free(graph->adj_matrix[i]->end_vertex_name);
-        free(graph->adj_matrix[i]);
+    char *line = strtok(input, "\n");
+    int num_islands = atoi(line);
+
+    Island islands[num_islands];
+    for (int i = 0; i < num_islands; ++i) {
+        char island_name[2] = {(char)('A' + i), '\0'}; // Single-letter island names A, B, C, ...
+        islands[i] = *create_island(island_name, i);
+    }
+
+    Graph *graph = create_graph(num_islands);
+
+    line = strtok(NULL, "\n"); // Move to the first edge
+    while (line != NULL) {
+        Edge edge;
+        char *dash_pos = strchr(line, '-');
+        char *comma_pos = strchr(line, ',');
+        int start_len = dash_pos - line;
+        int end_len = comma_pos - dash_pos - 1;
+
+        edge.start = mx_strndup(line, start_len);
+        edge.end = mx_strndup(dash_pos + 1, end_len);
+        edge.weight = atoi(comma_pos + 1);
+
+        add_edge(graph, edge, islands);
+
+        free(edge.start);
+        free(edge.end);
+
+        line = strtok(NULL, "\n"); // Move to the next edge
+    }
+
+    mx_printstr("Adjacency Matrix:\n");
+    print_graph(graph, islands);
+
+    // Free memory
+    for (int i = 0; i < num_islands; ++i) {
+        free(islands[i].name);
     }
     free(graph->adj_matrix);
     free(graph);
-}
-
-int main(int argc, char* argv[]) {
-    if (argc != 2) {
-        mx_printerr("Usage: <inputfile>");
-        return 1;
-    }
-
-    const char *filename = argv[1];
-    char *file_content = mx_file_to_str(filename); // Use mx_file_to_str to read file content
-
-    if (file_content == NULL) {
-        mx_printerr("Error: Cannot read file\n");
-        return 1;
-    }
-
-    // Extract number of vertices
-    int num_vertices;
-    num_vertices = mx_atoi(file_content);
-    while (*file_content != '\n') {
-        file_content++;
-    }
-    file_content++; // Move past the newline character
-
-    // Parse edges and create graph
-    Graph *graph = create_graph(num_vertices);
-    while (*file_content != '\0') {
-        Edge edge = parse_edge(file_content);
-        add_edge(graph, edge);
-        while (*file_content != '\n' && *file_content != '\0') {
-            file_content++;
-        }
-        if (*file_content == '\n') {
-            file_content++; // Move past the newline character
-        }
-    }
-
-    // Apply Floyd-Warshall algorithm to find shortest paths
-    floyd_warshall(graph);
-
-    // Print the shortest paths
-    print_shortest_paths(graph);
-
-    // Clean up: Free memory
-    free_graph(graph);
-    free(file_content);
 
     return 0;
 }
