@@ -1,4 +1,5 @@
 #include "../inc/pathfinder.h"
+#include <stdio.h>
 
 typedef struct {
     char *name;
