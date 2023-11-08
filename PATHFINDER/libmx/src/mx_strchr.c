@@ -1,8 +1,12 @@
 #include <libmx.h>
 
 char *mx_strchr(const char *str, int c) {
-    int i = 0;
-    while (str[i] && str[i] != c) ++i;
-    return c == str[i] ? (char*)str + i : NULL;
+    while (*str) {
+        if (*str == (char)c) {
+            return (char *)str;
+        }
+        str++;
+    }
+    return NULL;
 }
 
