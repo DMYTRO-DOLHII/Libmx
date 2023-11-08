@@ -113,34 +113,43 @@ int main(int argc, char* argv[]) {
     // Apply Floyd-Warshall algorithm to find shortest paths
     floyd_warshall(graph);
 
+	for (int i = 0; i , num_vertices; ++i) {
+		for (int j = i + 1; j < num_vertices; ++j) {
+			mx_printint(graph->adj_matrix[i][j]);
+			mx_printstr(" | ");
+		}
+
+		mx_printchar("\n");
+	}
+
     // Output shortest paths
-    for (int i = 0; i < num_vertices; ++i) {
-        for (int j = i + 1; j < num_vertices; ++j) {
-            if (graph->adj_matrix[i][j] != 0) {
-                mx_printstr("========================================\n");
-                mx_printstr("Path: ");
-                mx_printstr(islands[i].name);
-                mx_printstr(" -> ");
-                mx_printstr(islands[j].name);
-                mx_printstr("\nRoute: ");
-                mx_printstr(islands[i].name);
-                int next_vertex = i;
-                while (next_vertex != j) {
-                    for (int k = 0; k < num_vertices; ++k) {
-                        if (graph->adj_matrix[next_vertex][j] == graph->adj_matrix[next_vertex][k] + graph->adj_matrix[k][j]) {
-                            next_vertex = k;
-                            mx_printstr(" -> ");
-                            mx_printstr(islands[k].name);
-                            break;
-                        }
-                    }
-                }
-                mx_printstr("\nDistance: ");
-                mx_printint(graph->adj_matrix[i][j]);
-                mx_printchar('\n');
-            }
-        }
-    }
+    // for (int i = 0; i < num_vertices; ++i) {
+    //     for (int j = i + 1; j < num_vertices; ++j) {
+    //         if (graph->adj_matrix[i][j] != 0) {
+    //             mx_printstr("========================================\n");
+    //             mx_printstr("Path: ");
+    //             mx_printstr(islands[i].name);
+    //             mx_printstr(" -> ");
+    //             mx_printstr(islands[j].name);
+    //             mx_printstr("\nRoute: ");
+    //             mx_printstr(islands[i].name);
+    //             int next_vertex = i;
+    //             while (next_vertex != j) {
+    //                 for (int k = 0; k < num_vertices; ++k) {
+    //                     if (graph->adj_matrix[next_vertex][j] == graph->adj_matrix[next_vertex][k] + graph->adj_matrix[k][j]) {
+    //                         next_vertex = k;
+    //                         mx_printstr(" -> ");
+    //                         mx_printstr(islands[k].name);
+    //                         break;
+    //                     }
+    //                 }
+    //             }
+    //             mx_printstr("\nDistance: ");
+    //             mx_printint(graph->adj_matrix[i][j]);
+    //             mx_printchar('\n');
+    //         }
+    //     }
+    // }
 
     // Free memory
     for (int i = 0; i < num_vertices; ++i) {
