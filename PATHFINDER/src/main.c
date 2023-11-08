@@ -2,7 +2,7 @@
 
 typedef struct {
     int num_vertices;
-    int **adj_matrix;
+    Edge **adj_matrix;
 } Graph;
 
 typedef struct {
