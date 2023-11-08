@@ -102,7 +102,7 @@ void free_graph(Graph *graph) {
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
-        printf("Usage: %s <input_file>\n", argv[0]);
+        mx_printerr("Usage: <inputfile>");
         return 1;
     }
 
@@ -112,8 +112,8 @@ int main(int argc, char* argv[]) {
 	printf("%s", file_content);
 
     if (file_content == NULL) {
-        perror("Error reading the file");
-        exit(EXIT_FAILURE);
+        mx_printerr("Error reading file...");
+        exit(1);
     }
 
     return 0;
