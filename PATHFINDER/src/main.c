@@ -98,32 +98,12 @@ int main(int argc, char* argv[]) {
     const char *filename = argv[1];
     char *file_content = mx_file_to_str(filename); // Use mx_file_to_str to read file content
 
-	printf("%s", line);
+	printf("%s", file_content);
 
     if (file_content == NULL) {
         perror("Error reading the file");
         exit(EXIT_FAILURE);
     }
 
-    // Parse the file content into edges and create the graph
-    int num_vertices;
-    sscanf(file_content, "%d", &num_vertices);
-    Graph *graph = create_graph(num_vertices);
-
-    char *line = strtok(file_content, "\n");
-    while ((line = strtok(NULL, "\n")) != NULL) {
-        Edge edge = parse_edge(line);
-        add_edge(graph, edge);
-    }
-
-    // Apply Floyd-Warshall algorithm to find shortest paths
-    floyd_warshall(graph);
-
-    // Print the shortest paths
-    print_shortest_paths(graph);
-
-    // Clean up: Free memory and close the file descriptor
-    free_graph(graph);
-    free(file_content); // Free the dynamically allocated file content
     return 0;
 }
