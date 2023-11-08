@@ -47,7 +47,7 @@ void add_edge(Graph *graph, Edge edge, Island *islands) {
     graph->adj_matrix[end_index][start_index] = edge.weight;
 }
 
-void print_graph(Graph *graph, Island *islands) {
+void print_graph(Graph *graph) {
     for (int i = 0; i < graph->num_vertices; ++i) {
         for (int j = 0; j < graph->num_vertices; ++j) {
             char num_str[12]; // Assuming bridge length can be represented in 11 characters
@@ -71,7 +71,7 @@ int main() {
 
     Graph *graph = create_graph(num_islands);
 
-    line = strtok(NULL, "\n"); // Move to the first edge
+    line = mx_strtok(NULL, "\n"); // Move to the first edge
     while (line != NULL) {
         Edge edge;
         char *dash_pos = mx_strchr(line, '-');
@@ -92,7 +92,7 @@ int main() {
     }
 
     mx_printstr("Adjacency Matrix:\n");
-    print_graph(graph, islands);
+    print_graph(graph);
 
     // Free memory
     for (int i = 0; i < num_islands; ++i) {
