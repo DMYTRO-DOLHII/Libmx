@@ -25,7 +25,7 @@ void mx_printstr(const char *str) {
 
 Island* create_island(const char *name, int index) {
     Island *island = (Island*)malloc(sizeof(Island));
-    island->name = strdup(name);
+    island->name = mx_strdup(name);
     island->index = index;
     return island;
 }
@@ -82,8 +82,8 @@ int main() {
     line = strtok(NULL, "\n"); // Move to the first edge
     while (line != NULL) {
         Edge edge;
-        char *dash_pos = strchr(line, '-');
-        char *comma_pos = strchr(line, ',');
+        char *dash_pos = mx_strchr(line, '-');
+        char *comma_pos = mx_strchr(line, ',');
         int start_len = dash_pos - line;
         int end_len = comma_pos - dash_pos - 1;
 
@@ -96,7 +96,7 @@ int main() {
         free(edge.start);
         free(edge.end);
 
-        line = strtok(NULL, "\n"); // Move to the next edge
+        line = mx_strtok(NULL, "\n"); // Move to the next edge
     }
 
     mx_printstr("Adjacency Matrix:\n");
