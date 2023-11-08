@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
     const char *filename = argv[1];
     char *file_content = mx_file_to_str(filename); // Use mx_file_to_str to read file content
 
-	printf("%s", file_content);
+	mx_printstr(file_content);
 
     if (file_content == NULL) {
         mx_printerr("Error reading file...");
