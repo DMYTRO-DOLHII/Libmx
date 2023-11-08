@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include "../inc/pathfinder.h"
 
 typedef struct {
@@ -16,17 +15,6 @@ typedef struct {
     int end_vertex;
     int weight;
 } Edge;
-
-static void catch_errors(int argc, char *argv[]) {
-	usage_error(argc);
-	file_not_found(argv[1]);
-	empty_file(argv[1]);
-	invalid_first_line(argv[1]);
-	invalid_line(argv[1]);
-	invalid_islands(argv[1]);
-	duplicate_bridges(argv[1]);
-	lengths_sum(argv[1]);
-}
 
 Graph* create_graph(int num_vertices) {
     Graph *graph = (Graph*)malloc(sizeof(Graph));
@@ -61,11 +49,41 @@ void add_edge(Graph *graph, Edge edge) {
 }
 
 void floyd_warshall(Graph *graph) {
-    // Implement Floyd-Warshall algorithm
+    for (int k = 0; k < graph->num_vertices; ++k) {
+        for (int i = 0; i < graph->num_vertices; ++i) {
+            for (int j = 0; j < graph->num_vertices; ++j) {
+                if (graph->adj_matrix[i][k] != 0 && graph->adj_matrix[k][j] != 0) {
+                    int new_dist = graph->adj_matrix[i][k] + graph->adj_matrix[k][j];
+                    if (graph->adj_matrix[i][j] == 0 || new_dist < graph->adj_matrix[i][j]) {
+                        graph->adj_matrix[i][j] = new_dist;
+                    }
+                }
+            }
+        }
+    }
 }
 
 void print_shortest_paths(Graph *graph) {
-    // Implement printing shortest paths
+    for (int i = 0; i < graph->num_vertices; ++i) {
+        for (int j = i + 1; j < graph->num_vertices; ++j) {
+            if (graph->adj_matrix[i][j] != 0) {
+                printf("========================================\n");
+                printf("Path: %d -> %d\n", i, j);
+                printf("Route: %d", i);
+                int next_vertex = i;
+                while (next_vertex != j) {
+                    for (int k = 0; k < graph->num_vertices; ++k) {
+                        if (graph->adj_matrix[next_vertex][j] == graph->adj_matrix[next_vertex][k] + graph->adj_matrix[k][j]) {
+                            next_vertex = k;
+                            printf(" -> %d", k);
+                            break;
+                        }
+                    }
+                }
+                printf("\nDistance: %d\n", graph->adj_matrix[i][j]);
+            }
+        }
+    }
 }
 
 void free_graph(Graph *graph) {
@@ -82,32 +100,20 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    catch_errors(argc, argv);
-
     const char *filename = argv[1];
-    int file_descriptor = open(filename, O_RDONLY);
+    char *file_content = mx_file_to_str(filename); // Use mx_file_to_str to read file content
 
-    if (file_descriptor == -1) {
-        perror("Error opening the file");
-        exit(EXIT_FAILURE);
-    }
-
-    char buffer[4096]; // Buffer to store the file content
-    int bytes_read;
-
-    bytes_read = read(file_descriptor, buffer, sizeof(buffer));
-    if (bytes_read == -1) {
+    if (file_content == NULL) {
         perror("Error reading the file");
-        close(file_descriptor);
         exit(EXIT_FAILURE);
     }
 
     // Parse the file content into edges and create the graph
     int num_vertices;
-    sscanf(buffer, "%d", &num_vertices);
+    sscanf(file_content, "%d", &num_vertices);
     Graph *graph = create_graph(num_vertices);
 
-    char *line = strtok(buffer, "\n");
+    char *line = strtok(file_content, "\n");
     while ((line = strtok(NULL, "\n")) != NULL) {
         Edge edge = parse_edge(line);
         add_edge(graph, edge);
@@ -121,7 +127,6 @@ int main(int argc, char* argv[]) {
 
     // Clean up: Free memory and close the file descriptor
     free_graph(graph);
-    close(file_descriptor);
-
+    free(file_content); // Free the dynamically allocated file content
     return 0;
 }
