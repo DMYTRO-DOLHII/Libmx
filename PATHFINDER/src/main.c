@@ -109,12 +109,42 @@ int main(int argc, char* argv[]) {
     const char *filename = argv[1];
     char *file_content = mx_file_to_str(filename); // Use mx_file_to_str to read file content
 
-	mx_printstr(file_content);
-
     if (file_content == NULL) {
-        mx_printerr("Error reading file...");
-        exit(1);
+        mx_printerr("Error: Cannot read file\n");
+        return 1;
     }
+
+    // Extract number of vertices
+    int num_vertices;
+    char *endptr;
+    num_vertices = mx_atoi(file_content);
+    while (*file_content != '\n') {
+        file_content++;
+    }
+    file_content++; // Move past the newline character
+
+    // Parse edges and create graph
+    Graph *graph = create_graph(num_vertices);
+    while (*file_content != '\0') {
+        Edge edge = parse_edge(file_content);
+        add_edge(graph, edge);
+        while (*file_content != '\n' && *file_content != '\0') {
+            file_content++;
+        }
+        if (*file_content == '\n') {
+            file_content++; // Move past the newline character
+        }
+    }
+
+    // Apply Floyd-Warshall algorithm to find shortest paths
+    floyd_warshall(graph);
+
+    // Print the shortest paths
+    print_shortest_paths(graph);
+
+    // Clean up: Free memory
+    free_graph(graph);
+    free(file_content);
 
     return 0;
 }
