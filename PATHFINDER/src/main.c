@@ -41,6 +41,8 @@ Graph* create_graph(int num_vertices) {
 }
 
 void add_edge(Graph *graph, Edge edge, Island *islands) {
+	mx_printstr(edge.start[0]);
+	mx_printstr(edge.end[0]);
     int start_index = islands[edge.start[0] - 'A'].index;
     int end_index = islands[edge.end[0] - 'A'].index;
     graph->adj_matrix[start_index][end_index] = edge.weight;
@@ -81,7 +83,7 @@ int main() {
 
         edge.start = mx_strndup(line, start_len);
         edge.end = mx_strndup(dash_pos + 1, end_len);
-        edge.weight = atoi(comma_pos + 1);
+        edge.weight = mx_atoi(comma_pos + 1);
 
         add_edge(graph, edge, islands);
 
