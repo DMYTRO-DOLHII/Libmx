@@ -6,6 +6,8 @@ typedef struct {
 } Graph;
 
 typedef struct {
+    char *start_vertex_name;
+    char *end_vertex_name;
     int start_vertex;
     int end_vertex;
     int weight;
@@ -31,9 +33,11 @@ Graph* create_graph(int num_vertices) {
 Edge parse_edge(char *line) {
     Edge edge;
     char *token = mx_strtok(line, "-,");
+    edge.start_vertex_name = strdup(token);
     edge.start_vertex = mx_atoi(token);
 
     token = mx_strtok(NULL, "-,");
+    edge.end_vertex_name = strdup(token);
     edge.end_vertex = mx_atoi(token);
 
     token = mx_strtok(NULL, "-,");
@@ -68,9 +72,9 @@ void print_shortest_paths(Graph *graph) {
             if (graph->adj_matrix[i][j] != 0) {
                 mx_printstr("========================================\n");
                 mx_printstr("Path: ");
-                mx_printint(i);
+                mx_printstr(graph->adj_matrix[i][j]->start_vertex_name);
                 mx_printstr(" -> ");
-                mx_printint(j);
+                mx_printstr(graph->adj_matrix[i][j]->end_vertex_name);
                 mx_printstr("\nRoute: ");
                 mx_printint(i);
                 int next_vertex = i;
@@ -94,6 +98,8 @@ void print_shortest_paths(Graph *graph) {
 
 void free_graph(Graph *graph) {
     for (int i = 0; i < graph->num_vertices; ++i) {
+        free(graph->adj_matrix[i]->start_vertex_name);
+        free(graph->adj_matrix[i]->end_vertex_name);
         free(graph->adj_matrix[i]);
     }
     free(graph->adj_matrix);
