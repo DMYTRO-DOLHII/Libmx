@@ -113,8 +113,9 @@ int main(int argc, char* argv[]) {
     // Apply Floyd-Warshall algorithm to find shortest paths
     floyd_warshall(graph);
 
-	for (int i = 0; i < num_vertices; ++i) {
-		for (int j = i + 1; j < num_vertices; ++j) {
+	for (int i = 0; i < num_vertices; i++) {
+		for (int j = 0; j < num_vertices; j++) {
+			mx_printstr(" | ");
 			mx_printint(graph->adj_matrix[i][j]);
 			mx_printstr(" | ");
 		}
