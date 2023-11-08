@@ -1,8 +1,3 @@
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "../inc/pathfinder.h"
 
 typedef struct {
@@ -102,6 +97,8 @@ int main(int argc, char* argv[]) {
 
     const char *filename = argv[1];
     char *file_content = mx_file_to_str(filename); // Use mx_file_to_str to read file content
+
+	printf("%s", line);
 
     if (file_content == NULL) {
         perror("Error reading the file");
