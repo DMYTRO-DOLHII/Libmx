@@ -23,14 +23,14 @@ typedef struct s_matrix {
 } t_matrix;
 
 // Errors
-void usage_error(int argc);
-void file_not_found(const char *filename);
-void empty_file(const char *filename);
-void invalid_first_line(const char *filename);
-void invalid_line(const char *filename);
-void invalid_islands(const char *filename);
-void duplicate_bridges(const char *filename);
-void lengths_sum(const char *filename);
+// void usage_error(int argc);
+// void file_not_found(const char *filename);
+// void empty_file(const char *filename);
+// void invalid_first_line(const char *filename);
+// void invalid_line(const char *filename);
+// void invalid_islands(const char *filename);
+// void duplicate_bridges(const char *filename);
+// void lengths_sum(const char *filename);
 
 
 #endif
