@@ -41,13 +41,21 @@ Graph* create_graph(int num_vertices) {
 }
 
 void add_edge(Graph *graph, Edge edge, Island *islands) {
-	mx_printstr(edge.start[0]);
-	mx_printstr(edge.end[0]);
-    int start_index = islands[edge.start[0] - 'A'].index;
-    int end_index = islands[edge.end[0] - 'A'].index;
-    graph->adj_matrix[start_index][end_index] = edge.weight;
-    graph->adj_matrix[end_index][start_index] = edge.weight;
+    int start_index = edge.start[0] - 'A';
+    int end_index = edge.end[0] - 'A';
+
+    printf("Start Island: %c, Index: %d\n", edge.start[0], start_index);
+    printf("End Island: %c, Index: %d\n", edge.end[0], end_index);
+
+    // Check if the indices are within bounds
+    if (start_index >= 0 && start_index < graph->num_vertices && end_index >= 0 && end_index < graph->num_vertices) {
+        graph->adj_matrix[start_index][end_index] = edge.weight;
+        graph->adj_matrix[end_index][start_index] = edge.weight;
+    } else {
+        printf("Invalid indices: %d, %d\n", start_index, end_index);
+    }
 }
+
 
 void print_graph(Graph *graph) {
     for (int i = 0; i < graph->num_vertices; ++i) {
