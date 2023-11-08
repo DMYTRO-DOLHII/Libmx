@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
     Island islands[num_vertices];
     for (int i = 0; i < num_vertices; ++i) {
         char island_name[2] = {(char)('A' + i), '\0'};
-        islands[i].name = strdup(island_name);
+        islands[i].name = mx_strdup(island_name);
         islands[i].index = i;
     }
 
@@ -95,12 +95,12 @@ int main(int argc, char* argv[]) {
     char line[100];
     while (fgets(line, sizeof(line), file) != NULL) {
         Edge edge;
-        char *dash_pos = strtok(line, "-,");
-        edge.start = strdup(dash_pos);
-        dash_pos = strtok(NULL, "-,");
-        edge.end = strdup(dash_pos);
-        char *comma_pos = strtok(NULL, "-,");
-        edge.weight = atoi(comma_pos);
+        char *dash_pos = mx_strtok(line, "-,");
+        edge.start = mx_strdup(dash_pos);
+        dash_pos = mx_strtok(NULL, "-,");
+        edge.end = mx_strdup(dash_pos);
+        char *comma_pos = mx_strtok(NULL, "-,");
+        edge.weight = mx_atoi(comma_pos);
 
         add_edge(graph, edge, islands);
 
