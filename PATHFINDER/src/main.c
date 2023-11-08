@@ -116,7 +116,7 @@ int main(int argc, char* argv[]) {
 	for (int i = 0; i < num_vertices; i++) {
 		for (int j = 0; j < num_vertices; j++) {
 			mx_printstr(" | ");
-			mx_printint(graph->adj_matrix[i][j]);
+			// mx_printint(graph->adj_matrix[i][j]);
 			mx_printstr(" | ");
 		}
 
