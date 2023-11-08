@@ -116,7 +116,6 @@ int main(int argc, char* argv[]) {
 
     // Extract number of vertices
     int num_vertices;
-    char *endptr;
     num_vertices = mx_atoi(file_content);
     while (*file_content != '\n') {
         file_content++;
