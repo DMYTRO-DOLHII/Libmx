@@ -160,7 +160,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		if (end_index == -1) {
-			islands[num_islands].name = mx_strdup(edge.start);
+			islands[num_islands].name = mx_strdup(edge.end);
 			end_index = num_islands;
 			islands[num_islands].index = end_index;
 			num_islands++;
