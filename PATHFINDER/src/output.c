@@ -9,9 +9,9 @@ static void print_separator(void) {
 
 static void print_path(int *path, int path_length, Island *islands, int **matrix) {
     mx_printstr("Path: ");
-    mx_printstr(islands[path[0]].name);
-    mx_printstr(" -> ");
     mx_printstr(islands[path[1]].name);
+    mx_printstr(" -> ");
+    mx_printstr(islands[path[0]].name);
     mx_printchar('\n');
     mx_printstr("Route: ");
 
@@ -60,42 +60,37 @@ static void print_path(int *path, int path_length, Island *islands, int **matrix
 // 	islands[current].visited = false;
 // }
 
-static void dfs(Graph *graph, Island *islands, int current, int destination, int *path, int path_length, int **shortest_paths) {
+static void dfs(int **matrix, int **shortest_paths, int *path, int path_length, int size, Island *islands) {
 	int start = path[0];
 	int end = path[path_length];
 
-	for (int i = 0; i < graph->num_vertices; i++) {
-		if ((graph->adj_matrix[end][i] == shortest_paths[end][start] - shortest_paths[i][start]) && i != path[path_length]) {
+	for (int i = 0; i < size; i++) {
+		if ((matrix[end][i] == shortest_paths[end][start] - shortest_paths[i][start]) && i != path[path_length]) {
 			path_length++;
 			path[path_length] = i;
-			dfs(graph, islands, current, destination, path, path_length, shortest_paths);
-			// path_length--;
+			dfs(matrix, shortest_paths, path, path_length, size, islands);
+			path_length--;
 		}
 	}
 
 	if (path[path_length] != start) return;
 
 	print_separator();
-	print_path(path, path_length, islands, graph->adj_matrix);
+	print_path(path, path_length, islands, matrix);
 	print_separator();
 }
 
-void output(Graph *graph, Island *islands, int **shortest_paths, int point_a, int point_b) {
-    if (point_a < 0 || point_a >= graph->num_vertices || point_b < 0 || point_b >= graph->num_vertices) {
-        return;
+void output(int **matrix, int **shortest_paths, int size, Island *islands) {
+    int *path = (int*)malloc((size + 1) * sizeof(int));
+    int path_length = 1;
+
+    for (int i = 0; i < size; i++) {
+        for (int j = i + 1; j < size; j++) {
+            path[1] = i;
+            path[0] = j;
+            dfs(matrix, shortest_paths, path, path_length, size, islands);
+        }
     }
 
-    int distance = shortest_paths[point_a][point_b];
-
-    if (distance == 0) {
-        return;
-    }
-
-    int *path = (int *)malloc(graph->num_vertices * sizeof(int));
-
-	path[0] = point_a;
-	path[1] = point_b;
-
-    dfs(graph, islands, point_a, point_b, path, 0, shortest_paths);
     free(path);
 }
