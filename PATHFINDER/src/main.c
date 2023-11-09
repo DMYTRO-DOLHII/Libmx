@@ -112,7 +112,7 @@ int main(int argc, char* argv[]) {
 
     // Apply Floyd-Warshall algorithm to find shortest paths
     floyd_warshall(graph);
-	
+
     for (int i = 0; i < num_vertices; ++i) {
         for (int j = i + 1; j < num_vertices; ++j) {
             if (graph->adj_matrix[i][j] != 0) {
@@ -125,15 +125,22 @@ int main(int argc, char* argv[]) {
                 mx_printstr(islands[i].name);
                 int next_vertex = i;
                 while (next_vertex != j) {
-                    for (int k = 0; k < num_vertices; ++k) {
-                        if (graph->adj_matrix[next_vertex][j] == graph->adj_matrix[next_vertex][k] + graph->adj_matrix[k][j]) {
-                            next_vertex = k;
-                            mx_printstr(" -> ");
-                            mx_printstr(islands[k].name);
-                            break;
-                        }
-                    }
-                }
+					int found = 0; // Flag to indicate if the next vertex is found
+
+					for (int k = 0; k < num_vertices; ++k) {
+						if (graph->adj_matrix[next_vertex][j] == graph->adj_matrix[next_vertex][k] + graph->adj_matrix[k][j]) {
+							next_vertex = k;
+							found = 1; // Set the flag to indicate that the next vertex is found
+							mx_printstr(" -> ");
+							mx_printstr(islands[k].name);
+							break;
+						}
+					}
+
+					if (!found) {
+						break;
+					}
+				}
                 mx_printstr("\nDistance: ");
                 mx_printint(graph->adj_matrix[i][j]);
                 mx_printchar('\n');
