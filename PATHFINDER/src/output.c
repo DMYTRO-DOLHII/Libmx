@@ -51,7 +51,7 @@ static void dfs(Graph *graph, Island *islands, int current, int destination, int
     path[path_length] = current;
 
     if (current == destination) {
-        print_path(islands, path, path_length + 1, shortest_paths);
+        print_path(islands, path, path_length + 1);
     } else {
         for (int i = 0; i < graph->num_vertices; ++i) {
             if (graph->adj_matrix[current][i] != 0 && !islands[i].visited) {
@@ -71,7 +71,6 @@ void output(Graph *graph, Island *islands, int **shortest_paths, int point_a, in
     int distance = shortest_paths[point_a][point_b];
 
     if (distance == 0) {
-        mx_printstr("No path found between the points.\n");
         return;
     }
 

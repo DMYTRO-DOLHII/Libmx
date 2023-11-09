@@ -23,6 +23,6 @@ typedef struct {
     int weight;
 } Edge;
 
-void output(Graph *graph, Island *islands, int point_a, int point_b);
+void output(Graph *graph, Island *islands, int **shortest_paths, int point_a, int point_b);
 
 #endif

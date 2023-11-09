@@ -179,8 +179,8 @@ int main(int argc, char* argv[]) {
 
 	for (int i = 0; i < num_islands; i++) {
 		for (int j = i + 1; j < num_islands; j++) {
-			output(graph, islands, i, j);
-		}
+			output(graph, islands, i, j, shortest_pathes);
+		
 	}
 
 	free(graph);
