@@ -173,15 +173,11 @@ int main(int argc, char* argv[]) {
 		graph->adj_matrix[end_index][start_index] = edge.weight;
 	}
 
-	int **shortest_pathes;
+	int **shortest_paths;
 
-	floyd_warshall(graph, &shortest_pathes);
+	floyd_warshall(graph, &shortest_paths);
 
-	for (int i = 0; i < num_islands; i++) {
-		for (int j = i + 1; j < num_islands; j++) {
-			output(graph, islands, shortest_pathes, i, j);
-		}
-	}
+	output(graph->adj_matrix, shortest_paths, graph->num_vertices, islands);
 
 	free(graph);
     
