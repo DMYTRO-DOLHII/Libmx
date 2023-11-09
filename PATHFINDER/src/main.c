@@ -128,6 +128,9 @@ int main(int argc, char* argv[]) {
 			mx_printstr("Extraction failed...");
 		}
 
+		mx_printstr(line);
+		mx_printstr("\n");
+
 		Edge edge;
 
 		edge.start = mx_strdup(start);
