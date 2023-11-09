@@ -44,23 +44,45 @@ static void print_path(Island *islands, int *path, int path_length, Graph *graph
         mx_printint(distance);
     }
     mx_printchar('\n');
+	print_separator();
 }
 
+// static void dfs(Graph *graph, Island *islands, int current, int destination, int *path, int path_length, int **shortest_paths) {
+//     islands[current].visited = true;
+//     path[path_length] = current;
+
+//     if (current == destination) {
+//         print_path(islands, path, path_length + 1, graph);
+// 		return;
+//     } else {
+//         for (int i = 0; i < graph->num_vertices; ++i) {
+//             if (graph->adj_matrix[current][i] != INF && !islands[i].visited) {
+//                 dfs(graph, islands, i, destination, path, path_length + 1, shortest_paths);
+//             }
+//         }
+//     }
+
+// 	islands[current].visited = false;
+// }
+
 static void dfs(Graph *graph, Island *islands, int current, int destination, int *path, int path_length, int **shortest_paths) {
-    islands[current].visited = true;
-    path[path_length] = current;
+	int start = path[0];
+	int end = path[path_length];
 
-    if (current == destination) {
-        print_path(islands, path, path_length + 1, graph);
-    } else {
-        for (int i = 0; i < graph->num_vertices; ++i) {
-            if (graph->adj_matrix[current][i] != INF && !islands[i].visited) {
-                dfs(graph, islands, i, destination, path, path_length + 1, shortest_paths);
-            }
-        }
-    }
+	for (int i = 0; i < graph->num_vertices; i++) {
+		if ((graph->adj_matrix[end][i] == shortest_paths[end][start] - shortest_paths[i][start]) && i != path[path_length]) {
+			path_length++;
+			path[path_length] = i;
+			dfs(graph, islands, current, destination, path, path_length, shortest_paths);
+			path_length--;
+		}
+	}
 
-    islands[current].visited = false;
+	if (path[path_length] != start) return;
+
+	print_separator();
+	print_path(islands, path, path_length, graph);
+	print_separator();
 }
 
 void output(Graph *graph, Island *islands, int **shortest_paths, int point_a, int point_b) {
