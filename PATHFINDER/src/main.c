@@ -79,12 +79,19 @@ int main(int argc, char* argv[]) {
 	char *line = mx_strtok((char*)file, "\n");
 	int verticies = mx_atoi(line);
 
+	mx_printint(verticies);
+	mx_printstr("\n");
+
 	while((line = mx_strtok(NULL, "\n")) != NULL) {
 		char start[100];
 		char end[100];
 		int weight;
 
 		int r = mx_sscanf(line, "%s-%s,%d", start, end, &weight);
+
+		if (r != 3) {
+			mx_printstr("Extraction failed...");
+		}
 
 		mx_printstr(start);
 		mx_printchar('-');
