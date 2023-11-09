@@ -37,16 +37,6 @@ Graph* create_graph(int num_vertices) {
     return graph;
 }
 
-void add_edge(Graph *graph, Edge edge) {
-    int start_index = edge.start[0] - 'A';
-    int end_index = edge.end[0] - 'A';
-	mx_printstr("\n--- Itaration ---\n");
-	mx_printint(start_index);
-	mx_printint(end_index);
-    graph->adj_matrix[start_index][end_index] = edge.weight;
-    graph->adj_matrix[end_index][start_index] = edge.weight;
-}
-
 void floyd_warshall(Graph *graph) {
     for (int k = 0; k < graph->num_vertices; ++k) {
         for (int i = 0; i < graph->num_vertices; ++i) {
@@ -62,16 +52,22 @@ void floyd_warshall(Graph *graph) {
     }
 }
 
+
+
 int main(int argc, char* argv[]) {
     if (argc != 2) {
         fprintf(stderr, "Usage: %s [filename]\n", argv[0]);
         return 1;
     }
 
+
     char *file = mx_file_to_str(argv[1]);
 
 	char *line = mx_strtok((char*)file, "\n");
 	int verticies = mx_atoi(line);
+
+	Island* islands[verticies];
+	int num_islands = 0;
 
 	Graph* graph = create_graph(verticies);
 
@@ -92,7 +88,50 @@ int main(int argc, char* argv[]) {
 		edge.end = mx_strdup(end);
 		edge.weight = weight;
 
-		add_edge(graph, edge);
+
+		// ------ Get start index
+		int start_index = -1;
+		for (int i = 0; i < num_islands; i++) {
+			if (mx_strcmp(islands[i], edge.start) == 0) {
+                start_index = i;
+                break;
+            }
+		}
+
+		if (start_index == -1) {
+			mx_strcpy(islands[num_islands], edge.start);
+			start_index = num_islands;
+			islands[num_islands]->index = start_index;
+			num_islands++;
+		}
+
+		// ------ Get end index
+		int end_index = -1;
+		for (int i = 0; i < num_islands; i++) {
+			if (mx_strcmp(islands[i], edge.end) == 0) {
+                end_index = i;
+                break;
+            }
+		}
+
+		if (end_index == -1) {
+			mx_strcpy(islands[num_islands], edge.end);
+			end_index = num_islands;
+			islands[num_islands]->index = end_index;
+			num_islands++;
+		}
+
+		graph->adj_matrix[start_index][end_index] = edge.weight;
+		graph->adj_matrix[end_index][start_index] = edge.weight;
+	}
+
+	for (int i = 0; i < verticies; i++) {
+		for (int j = 0; j < verticies; j++) {
+			mx_printint(graph->adj_matrix[i][j]);
+			mx_printchar('|');
+		}
+
+		mx_printstr("\n");
 	}
     
 
