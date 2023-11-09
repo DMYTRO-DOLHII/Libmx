@@ -56,6 +56,32 @@ void floyd_warshall(Graph *graph) {
     }
 }
 
+void print_shortest_paths(Graph *graph, Island *islands) {
+    for (int i = 0; i < graph->num_vertices; ++i) {
+        for (int j = i + 1; j < graph->num_vertices; ++j) {
+            if (graph->adj_matrix[i][j] != 0) {
+                printf("========================================\n");
+                printf("Path: %s -> %s\n", islands[i].name, islands[j].name);
+                printf("Route: %s", islands[i].name);
+                int next_vertex = i;
+                while (next_vertex != j) {
+                    for (int k = 0; k < graph->num_vertices; ++k) {
+                        if (graph->adj_matrix[next_vertex][j] == graph->adj_matrix[next_vertex][k] + graph->adj_matrix[k][j]) {
+                            next_vertex = k;
+                            printf(" -> %s", islands[k].name);
+                            break;
+                        }
+                    }
+                }
+                printf("\nDistance: ");
+                printf("%d", graph->adj_matrix[i][j]);
+                printf("\n");
+            }
+        }
+    }
+}
+
+
 int mx_sscanf(const char *str, const char *format, char *start, char *end, int *weight) {
    int parsed_values = 0;
 
@@ -178,14 +204,9 @@ int main(int argc, char* argv[]) {
 
 	floyd_warshall(graph);
 
-	for (int i = 0; i < verticies; i++) {
-		for (int j = 0; j < verticies; j++) {
-			mx_printint(graph->adj_matrix[i][j]);
-			mx_printchar('|');
-		}
+	print_shortest_paths(graph, islands);
 
-		mx_printstr("\n");
-	}
+	free(graph);
     
 
     return 0;
