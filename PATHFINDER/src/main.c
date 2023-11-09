@@ -3,22 +3,6 @@
 #include <string.h>
 #include "../inc/pathfinder.h"
 
-typedef struct {
-    char *name;
-    int index;
-} Island;
-
-typedef struct {
-    int num_vertices;
-    int **adj_matrix;
-} Graph;
-
-typedef struct {
-    char *start;
-    char *end;
-    int weight;
-} Edge;
-
 
 Graph* create_graph(int num_vertices) {
     Graph *graph = (Graph*)malloc(sizeof(Graph));
@@ -51,31 +35,6 @@ void floyd_warshall(Graph *graph) {
 						graph->adj_matrix[i][j] = 0;
 					}
                 }
-            }
-        }
-    }
-}
-
-void print_shortest_paths(Graph *graph, Island *islands) {
-    for (int i = 0; i < graph->num_vertices; ++i) {
-        for (int j = i + 1; j < graph->num_vertices; ++j) {
-            if (graph->adj_matrix[i][j] != 0) {
-                printf("========================================\n");
-                printf("Path: %s -> %s\n", islands[i].name, islands[j].name);
-                printf("Route: %s", islands[i].name);
-                int next_vertex = j;
-                while (next_vertex != i) {
-                    for (int k = 0; k < graph->num_vertices; ++k) {
-                        if (graph->adj_matrix[next_vertex][i] == graph->adj_matrix[next_vertex][k] + graph->adj_matrix[k][i]) {
-                            next_vertex = k;
-                            printf(" -> %s", islands[k].name);
-                            break;
-                        }
-                    }
-                }
-                printf("\nDistance: ");
-                printf("%d", graph->adj_matrix[i][j]);
-                printf("\n");
             }
         }
     }
