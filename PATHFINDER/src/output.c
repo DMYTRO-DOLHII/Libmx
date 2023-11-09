@@ -15,7 +15,7 @@ static void print_path(int *path, int path_length, Island *islands, int **matrix
     mx_printchar('\n');
     mx_printstr("Route: ");
 
-    for (int i = 0; i < path_length; i++) {
+    for (int i = 1; i < path_length + 1; i++) {
         mx_printstr(islands[path[i]].name);
         if (i < path_length) {
             mx_printstr(" -> ");
