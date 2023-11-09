@@ -1,91 +1,71 @@
 #include "../inc/pathfinder.h"
 
-static void floyd_warshall_path(Graph *graph, int *route, int len) {
-    int num_vertices = graph->num_vertices;
-
-    // Initialize the path matrix with the initial route
-    int path[num_vertices][num_vertices];
-    for (int i = 0; i < num_vertices; ++i) {
-        for (int j = 0; j < num_vertices; ++j) {
-            path[i][j] = -1;  // Indicates no intermediate vertex
-        }
+static void print_separator(void) {
+    for (int i = 0; i < 40; ++i) {
+        mx_printchar('=');
     }
-
-    // Set the initial path matrix based on the given route
-    for (int i = 0; i < len - 1; ++i) {
-        path[route[i]][route[i + 1]] = route[i];
-    }
-
-    // Floyd-Warshall algorithm to find shortest paths and intermediate vertices
-    for (int k = 0; k < num_vertices; ++k) {
-        for (int i = 0; i < num_vertices; ++i) {
-            for (int j = 0; j < num_vertices; ++j) {
-                if (graph->adj_matrix[i][k] != 0 && graph->adj_matrix[k][j] != 0) {
-                    int new_dist = graph->adj_matrix[i][k] + graph->adj_matrix[k][j];
-                    if (graph->adj_matrix[i][j] == 0 || new_dist < graph->adj_matrix[i][j]) {
-                        graph->adj_matrix[i][j] = new_dist;
-                        path[i][j] = k;
-                    }
-                }
-            }
-        }
-    }
-
-    // Reconstruct the intermediate vertices for the given route
-    int start = route[0];
-    int end = route[len - 1];
-    int intermediate = path[start][end];
-    int count = 1;
-
-    while (intermediate != -1) {
-        route[len - count] = intermediate;
-        intermediate = path[start][intermediate];
-        ++count;
-    }
+    mx_printchar('\n');
 }
 
-static void print_path_route(Island *islands, int *route, int len) {
+static void print_path(Island *islands, int *path, int path_length, Graph *graph) {
+    print_separator();
     mx_printstr("Path: ");
-    mx_printstr(islands[route[0]].name);
+    mx_printstr(islands[path[0]].name);
     mx_printstr(" -> ");
-    mx_printstr(islands[route[len - 1]].name);
-    mx_printstr("\nRoute: ");
-    mx_printstr(islands[route[0]].name);
-    for (int i = 1; i < len; ++i) {
-        mx_printstr(" -> ");
-        mx_printstr(islands[route[i]].name);
-    }
-    mx_printstr("\n");
-}
+    mx_printstr(islands[path[path_length - 1]].name);
+    mx_printchar('\n');
 
-static void print_distance(int **adj_matrix, int *route, int len) {
-    int sum = 0;
+    mx_printstr("Route: ");
+    mx_printstr(islands[path[0]].name);
+    for (int i = 1; i < path_length; ++i) {
+        mx_printstr(" -> ");
+        mx_printstr(islands[path[i]].name);
+    }
+    mx_printchar('\n');
+
     mx_printstr("Distance: ");
-    for (int i = 0; i < len - 1; ++i) {
-        sum += adj_matrix[route[i]][route[i + 1]];
-        mx_printint(adj_matrix[route[i]][route[i + 1]]);
-        if (i < len - 2) {
+    int distance = 0;
+    for (int i = 0; i < path_length - 1; ++i) {
+        int start = path[i];
+        int end = path[i + 1];
+        distance += islands[start].index < islands[end].index ? 
+                    graph->adj_matrix[start][end] : graph->adj_matrix[end][start];
+        mx_printint(distance);
+        if (i < path_length - 2) {
             mx_printstr(" + ");
-        } else {
-            mx_printstr(" = ");
-            mx_printint(sum);
-            mx_printstr("\n");
         }
     }
+
+    if (path_length > 2) {
+        mx_printstr(" = ");
+        mx_printint(distance);
+    }
+    mx_printchar('\n');
 }
 
-void print_shortest_paths(Graph *graph, Island *islands) {
-    for (int i = 0; i < graph->num_vertices; ++i) {
-        for (int j = i + 1; j < graph->num_vertices; ++j) {
-            if (graph->adj_matrix[i][j] != 0) {
-                mx_printstr("========================================\n");
-                int route[graph->num_vertices];
-                route[0] = i;
-                route[1] = j;
-                floyd_warshall_path(graph, route, 2);
-                print_path_route(islands, route, 2);
-                print_distance(graph->adj_matrix, route, 2);
+static void dfs(Graph *graph, Island *islands, int current, int destination, int *path, int path_length) {
+    islands[current].visited = true;
+    path[path_length] = current;
+
+    if (current == destination) {
+        print_path(islands, path, path_length + 1, graph);
+    } else {
+        for (int i = 0; i < graph->num_vertices; ++i) {
+            if (graph->adj_matrix[current][i] != 0 && !islands[i].visited) {
+                dfs(graph, islands, i, destination, path, path_length + 1);
             }
         }
     }
+
+    islands[current].visited = false;
+}
+
+static void find_paths_between_points(Graph *graph, Island *islands, int point_a, int point_b) {
+    int *path = (int *)malloc(graph->num_vertices * sizeof(int));
+    dfs(graph, islands, point_a, point_b, path, 0);
+    free(path);
+}
+
+void output(Graph *graph, Island *islands, int point_a, int point_b) {
+    find_paths_between_points(graph, islands, point_a, point_b);
 }

@@ -9,6 +9,7 @@
 typedef struct {
     char *name;
     int index;
+	bool visited;
 } Island;
 
 typedef struct {
@@ -22,8 +23,6 @@ typedef struct {
     int weight;
 } Edge;
 
-
-
-void print_shortest_paths(Graph *graph, Island *islands);
+void output(Graph *graph, Island *islands, int point_a, int point_b);
 
 #endif
