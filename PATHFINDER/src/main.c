@@ -46,6 +46,10 @@ void floyd_warshall(Graph *graph) {
                     if (graph->adj_matrix[i][j] == 0 || new_dist < graph->adj_matrix[i][j]) {
                         graph->adj_matrix[i][j] = new_dist;
                     }
+
+					if (i == j) {
+						graph->adj_matrix[i][j] = 0;
+					}
                 }
             }
         }
