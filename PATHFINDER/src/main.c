@@ -43,7 +43,7 @@ void floyd_warshall(Graph *graph, int ***shortest_paths) {
                     }
 
                     if (i == j) {
-                        (*shortest_paths)[i][j] = INF;
+                        (*shortest_paths)[i][j] = 0;
                     }
                 }
             }
