@@ -96,6 +96,6 @@ void output(Graph *graph, Island *islands, int **shortest_paths, int point_a, in
 	path[0] = point_a;
 	path[1] = point_b;
 
-    dfs(graph, islands, point_a, point_b, path, 0, shortest_paths);
+    dfs(graph, islands, point_a, point_b, path, 1, shortest_paths);
     free(path);
 }
