@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
 		int r = mx_sscanf(line, "%s-%s,%d", start, end, &weight);
 
 		if (r != 3) {
-			mx_printstr("Extraction failed...");
+			continue;
 		}
 
 		mx_printstr(line);
