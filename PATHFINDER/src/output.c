@@ -9,13 +9,13 @@ static void print_separator(void) {
 
 static void print_path(int *path, int path_length, Island *islands, int **matrix) {
     mx_printstr("Path: ");
-    mx_printstr(islands[path[0]].name);
-    mx_printstr(" -> ");
     mx_printstr(islands[path[1]].name);
+    mx_printstr(" -> ");
+    mx_printstr(islands[path[0]].name);
     mx_printchar('\n');
     mx_printstr("Route: ");
 
-    for (int i = 0; i < path_length; i++) {
+    for (int i = 1; i < path_length + 1; i++) {
         mx_printstr(islands[path[i]].name);
         if (i < path_length) {
             mx_printstr(" -> ");
@@ -93,8 +93,8 @@ void output(Graph *graph, Island *islands, int **shortest_paths, int point_a, in
 
     int *path = (int *)malloc(graph->num_vertices * sizeof(int));
 
-	path[0] = point_a;
-	path[1] = point_b;
+	path[1] = point_a;
+	path[0] = point_b;
 
     dfs(graph, islands, point_a, point_b, path, 1, shortest_paths);
     free(path);
