@@ -32,6 +32,7 @@ int mx_strcmp(const char *s1, const char *s2);
 int mx_bubble_sort(char **arr, int size);
 int mx_quicksort(char **arr, int left, int right);
 
+
 void mx_swap_char(char *s1, char *s2);
 void mx_str_reverse(char *s);
 void mx_strdel(char **str);
@@ -44,6 +45,7 @@ char *mx_strncpy(char *dst, const char *src, int len);
 char *mx_strcat(char *restrict s1, const char *restrict s2);
 int mx_strncmp(const char *s1, const char *s2, int n);
 char *mx_strstr(const char *haystack, const char *needle);
+int mx_sscanf(const char *str, const char *format, char *start, char *end, int *weight);
 int mx_get_substr_index(const char *str, const char *sub);
 int mx_count_substr(const char *str, const char *sub);
 int mx_count_words(const char *str, char c);
@@ -55,7 +57,6 @@ char *mx_strjoin(const char *s1, const char *s2);
 char *mx_file_to_str(const char *file);
 char *mx_replace_substr(const char *str, const char *sub, const char *replace);
 int mx_read_line(char **lineptr, size_t buf_size, char delim, const int file);
-int mx_sscanf(const char *str, const char *format, char *city1, char *city2, int *distance);
 
 void *mx_memset(void *b, int c, size_t len);
 void *mx_memcpy(void *restrict dst, const void *restrict src, size_t n);
