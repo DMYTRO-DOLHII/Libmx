@@ -54,7 +54,7 @@ static void dfs(Graph *graph, Island *islands, int current, int destination, int
         print_path(islands, path, path_length + 1, graph);
     } else {
         for (int i = 0; i < graph->num_vertices; ++i) {
-            if (graph->adj_matrix[current][i] != 0 && !islands[i].visited) {
+            if (graph->adj_matrix[current][i] != INF && !islands[i].visited) {
                 dfs(graph, islands, i, destination, path, path_length + 1, shortest_paths);
             }
         }

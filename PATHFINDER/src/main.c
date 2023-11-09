@@ -177,11 +177,13 @@ int main(int argc, char* argv[]) {
 
 	floyd_warshall(graph, &shortest_pathes);
 
-	for (int i = 0; i < num_islands; i++) {
-		for (int j = i + 1; j < num_islands; j++) {
-			output(graph, islands, shortest_pathes, i, j);
-		}
-	}
+	// for (int i = 0; i < num_islands; i++) {
+	// 	for (int j = i + 1; j < num_islands; j++) {
+	// 		output(graph, islands, shortest_pathes, i, j);
+	// 	}
+	// }
+
+	output(graph, islands, shortest_pathes, 0, 1);
 
 	free(graph);
     
