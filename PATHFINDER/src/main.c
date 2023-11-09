@@ -177,40 +177,6 @@ int main(int argc, char* argv[]) {
 
 	floyd_warshall(graph, &shortest_paths);
 
-	for (int i = 0; i < verticies; i++) {
-		for (int j = 0; j < verticies; j++) {
-			mx_printint(graph->adj_matrix[i][j]);
-			mx_printstr(" ");
-		}
-
-		mx_printstr("\n");
-	}
-
-	mx_printstr("\n");
-
-	for (int i = 0; i < verticies; i++) {
-		for (int j = 0; j < verticies; j++) {
-			mx_printint(shortest_paths[i][j]);
-			mx_printstr(" ");
-		}
-
-		mx_printstr("\n");
-	}
-
-	mx_printstr("\n");
-
-	mx_printint(graph->num_vertices);
-
-	mx_printstr("\n");
-
-	for (int i = 0; i < verticies; i++) {
-		mx_printstr(islands[i].name);
-		mx_printstr(" ");
-		mx_printint(islands[i].index);
-	}
-
-	mx_printstr("\n");
-
 	output(graph->adj_matrix, shortest_paths, graph->num_vertices, islands);
 
 	free(graph);
