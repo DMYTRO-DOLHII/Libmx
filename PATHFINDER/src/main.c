@@ -63,10 +63,10 @@ void print_shortest_paths(Graph *graph, Island *islands) {
                 printf("========================================\n");
                 printf("Path: %s -> %s\n", islands[i].name, islands[j].name);
                 printf("Route: %s", islands[i].name);
-                int next_vertex = i;
-                while (next_vertex != j) {
+                int next_vertex = j;
+                while (next_vertex != i) {
                     for (int k = 0; k < graph->num_vertices; ++k) {
-                        if (graph->adj_matrix[next_vertex][j] == graph->adj_matrix[next_vertex][k] + graph->adj_matrix[k][j]) {
+                        if (graph->adj_matrix[next_vertex][i] == graph->adj_matrix[next_vertex][k] + graph->adj_matrix[k][i]) {
                             next_vertex = k;
                             printf(" -> %s", islands[k].name);
                             break;
