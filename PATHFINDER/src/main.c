@@ -70,96 +70,50 @@ void floyd_warshall(Graph *graph) {
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
-        mx_printstr("usage: ./pathfinder [filename]\n");
+        fprintf(stderr, "Usage: %s [filename]\n", argv[0]);
         return 1;
     }
 
-    FILE *file = fopen(argv[1], "r");
-    if (file == NULL) {
-        mx_printstr("Error: Cannot open file\n");
+    int fd = open(argv[1], O_RDONLY);
+    if (fd == -1) {
+        perror("Error: Cannot open file");
         return 1;
     }
 
-    // Read number of vertices from the first line
-    int num_vertices;
-    fscanf(file, "%d\n", &num_vertices);
-
-    // Initialize islands and graph
-    Island islands[num_vertices];
-    for (int i = 0; i < num_vertices; ++i) {
-        char island_name[2] = {(char)('A' + i), '\0'};
-        islands[i].name = mx_strdup(island_name);
-        islands[i].index = i;
+    // Read the number of vertices from the first line
+    char numVerticesStr[10]; // Assuming the number of vertices won't exceed 10 digits
+    ssize_t bytesRead = read(fd, numVerticesStr, sizeof(numVerticesStr));
+    if (bytesRead <= 0) {
+        perror("Error: Unable to read the number of vertices");
+        close(fd);
+        return 1;
     }
 
-    Graph *graph = create_graph(num_vertices);
+    int numVertices = atoi(numVerticesStr);
+    printf("Number of Vertices: %d\n", numVertices);
 
-    // Parse edges and fill the graph
-    char line[100];
-    while (fgets(line, sizeof(line), file) != NULL) {
-        Edge edge;
-        char *dash_pos = mx_strtok(line, "-,");
-        edge.start = mx_strdup(dash_pos);
-        dash_pos = mx_strtok(NULL, "-,");
-        edge.end = mx_strdup(dash_pos);
-        char *comma_pos = mx_strtok(NULL, "-,");
-        edge.weight = mx_atoi(comma_pos);
+    // Read the file line by line to extract edges
+    char buffer[100];
+    while ((bytesRead = read(fd, buffer, sizeof(buffer))) > 0) {
+        buffer[bytesRead] = '\0'; // Null-terminate the buffer
+        char *line = buffer;
 
-        add_edge(graph, edge);
+        // Extract edges from the line and process them
+        char *dashPos = strtok(line, "-,");
+        char *start = dashPos;
+        dashPos = strtok(NULL, "-,");
+        char *end = dashPos;
+        char *weightStr = strtok(NULL, "-,\n");
+        int weight = atoi(weightStr);
 
-        free(edge.start);
-        free(edge.end);
+        // Process the extracted edge (start, end, weight)
+        printf("Edge: %s -> %s, Weight: %d\n", start, end, weight);
     }
 
-    fclose(file);
-
-    // Apply Floyd-Warshall algorithm to find shortest paths
-    floyd_warshall(graph);
-
-    for (int i = 0; i < num_vertices; ++i) {
-        for (int j = i + 1; j < num_vertices; ++j) {
-            if (graph->adj_matrix[i][j] != 0) {
-                mx_printstr("========================================\n");
-                mx_printstr("Path: ");
-                mx_printstr(islands[i].name);
-                mx_printstr(" -> ");
-                mx_printstr(islands[j].name);
-                mx_printstr("\nRoute: ");
-                mx_printstr(islands[i].name);
-                int next_vertex = i;
-                while (next_vertex != j) {
-					int found = 0; // Flag to indicate if the next vertex is found
-
-					for (int k = 0; k < num_vertices; ++k) {
-						if (graph->adj_matrix[next_vertex][j] == graph->adj_matrix[next_vertex][k] + graph->adj_matrix[k][j]) {
-							next_vertex = k;
-							found = 1; // Set the flag to indicate that the next vertex is found
-							mx_printstr(" -> ");
-							mx_printstr(islands[k].name);
-							break;
-						}
-					}
-
-					if (!found) {
-						break;
-					}
-				}
-                mx_printstr("\nDistance: ");
-                mx_printint(graph->adj_matrix[i][j]);
-                mx_printchar('\n');
-            }
-        }
+    if (bytesRead == -1) {
+        perror("Error: Cannot read file");
     }
 
-    // Free memory
-    for (int i = 0; i < num_vertices; ++i) {
-        free(islands[i].name);
-    }
-    for (int i = 0; i < num_vertices; ++i) {
-        free(graph->adj_matrix[i]);
-    }
-    free(graph->adj_matrix);
-    free(graph);
-
+    close(fd);
     return 0;
 }
