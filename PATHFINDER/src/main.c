@@ -46,6 +46,9 @@ Graph* create_graph(int num_vertices) {
 void add_edge(Graph *graph, Edge edge) {
     int start_index = edge.start[0] - 'A';
     int end_index = edge.end[0] - 'A';
+	mx_printstr("\n--- Itaration ---\n");
+	mx_printint(start_index);
+	mx_printint(end_index);
     graph->adj_matrix[start_index][end_index] = edge.weight;
     graph->adj_matrix[end_index][start_index] = edge.weight;
 }
