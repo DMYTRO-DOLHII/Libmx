@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 #define INT_MAX 2147483647
+#define INF 9999999
 
 typedef struct {
     char *name;

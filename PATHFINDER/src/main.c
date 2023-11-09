@@ -14,7 +14,7 @@ Graph* create_graph(int num_vertices) {
 
         // Initialize matrix elements to 0 manually
         for (int j = 0; j < num_vertices; ++j) {
-            graph->adj_matrix[i][j] = 0;
+            graph->adj_matrix[i][j] = INF;
         }
     }
 
@@ -180,7 +180,7 @@ int main(int argc, char* argv[]) {
 	for (int i = 0; i < num_islands; i++) {
 		for (int j = i + 1; j < num_islands; j++) {
 			output(graph, islands, shortest_pathes, i, j);
-		
+		}
 	}
 
 	free(graph);
