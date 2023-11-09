@@ -121,6 +121,9 @@ int main(int argc, char* argv[]) {
 			num_islands++;
 		}
 
+		mx_printstr("--- Iteration ---\n");
+
+
 		graph->adj_matrix[start_index][end_index] = edge.weight;
 		graph->adj_matrix[end_index][start_index] = edge.weight;
 	}
