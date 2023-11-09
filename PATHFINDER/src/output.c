@@ -14,33 +14,31 @@ static void print_path(int *path, int path_length, Island *islands, int **matrix
     mx_printstr(islands[path[0]].name);
     mx_printchar('\n');
     mx_printstr("Route: ");
-    mx_printstr(islands[path[0]].name);
-    for (int i = 1; i < path_length; ++i) {
-        mx_printstr(" -> ");
+
+    for (int i = 0; i < path_length; i++) {
         mx_printstr(islands[path[i]].name);
+        if (i < path_length) {
+            mx_printstr(" -> ");
+        }
     }
-    mx_printchar('\n');
 
-    mx_printstr("Distance: ");
-    int distance = 0;
-    for (int i = 0; i < path_length - 1; ++i) {
-        int start = path[i];
-        int end = path[i + 1];
-        int next_distance = islands[start].index < islands[end].index ? 
-                    matrix[start][end] : matrix[end][start];
-        mx_printint(next_distance);
+    mx_printstr("\nDistance: ");
+    int path_dist = 0;
 
-		distance += next_distance;
-
-        if (i < path_length - 2) {
+    for (int i = 1; i < path_length; i++) {
+        int between = matrix[path[i]][path[i + 1]];
+        mx_printint(between);
+        path_dist += between;
+        if (i < path_length - 1) {
             mx_printstr(" + ");
         }
     }
 
-    if (path_length > 2) {
+    if (path_length != 2) {
         mx_printstr(" = ");
-        mx_printint(distance);
+        mx_printint(path_dist);
     }
+
     mx_printchar('\n');
 }
 
