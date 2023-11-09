@@ -21,24 +21,36 @@ Graph* create_graph(int num_vertices) {
     return graph;
 }
 
-void floyd_warshall(Graph *graph) {
-    for (int k = 0; k < graph->num_vertices; ++k) {
-        for (int i = 0; i < graph->num_vertices; ++i) {
-            for (int j = 0; j < graph->num_vertices; ++j) {
-                if (graph->adj_matrix[i][k] != 0 && graph->adj_matrix[k][j] != 0) {
-                    int new_dist = graph->adj_matrix[i][k] + graph->adj_matrix[k][j];
-                    if (graph->adj_matrix[i][j] == 0 || new_dist < graph->adj_matrix[i][j]) {
-                        graph->adj_matrix[i][j] = new_dist;
+void floyd_warshall(Graph *graph, int ***shortest_paths) {
+    int num_vertices = graph->num_vertices;
+
+    *shortest_paths = (int **)malloc(num_vertices * sizeof(int *));
+    for (int i = 0; i < num_vertices; ++i) {
+        (*shortest_paths)[i] = (int *)malloc(num_vertices * sizeof(int));
+
+        for (int j = 0; j < num_vertices; ++j) {
+            (*shortest_paths)[i][j] = graph->adj_matrix[i][j];
+        }
+    }
+
+    for (int k = 0; k < num_vertices; ++k) {
+        for (int i = 0; i < num_vertices; ++i) {
+            for (int j = 0; j < num_vertices; ++j) {
+                if ((*shortest_paths)[i][k] != 0 && (*shortest_paths)[k][j] != 0) {
+                    int new_dist = (*shortest_paths)[i][k] + (*shortest_paths)[k][j];
+                    if ((*shortest_paths)[i][j] == 0 || new_dist < (*shortest_paths)[i][j]) {
+                        (*shortest_paths)[i][j] = new_dist;
                     }
 
-					if (i == j) {
-						graph->adj_matrix[i][j] = 0;
-					}
+                    if (i == j) {
+                        (*shortest_paths)[i][j] = 0;
+                    }
                 }
             }
         }
     }
 }
+
 
 
 int mx_sscanf(const char *str, const char *format, char *start, char *end, int *weight) {
@@ -161,9 +173,27 @@ int main(int argc, char* argv[]) {
 		graph->adj_matrix[end_index][start_index] = edge.weight;
 	}
 
-	floyd_warshall(graph);
+	int **shortest_pathes;
 
-	print_shortest_paths(graph, islands);
+	floyd_warshall(graph, shortest_pathes);
+
+	for (int i = 0; i < num_islands; i++) {
+		for (int j = 0; j < num_islands; j++) {
+			mx_printint(graph->adj_matrix[i][j]);
+			mx_printstr(" ");
+		}
+
+		mx_printstr("\n");
+	}
+
+	for (int i = 0; i < num_islands; i++) {
+		for (int j = 0; j < num_islands; j++) {
+			mx_printint(shortest_pathes[i][j]);
+			mx_printstr(" ");
+		}
+
+		mx_printstr("\n");
+	}
 
 	free(graph);
     
