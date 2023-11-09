@@ -28,9 +28,12 @@ static void print_path(Island *islands, int *path, int path_length, Graph *graph
     for (int i = 0; i < path_length - 1; ++i) {
         int start = path[i];
         int end = path[i + 1];
-        distance += islands[start].index < islands[end].index ? 
+        int next_distance = islands[start].index < islands[end].index ? 
                     graph->adj_matrix[start][end] : graph->adj_matrix[end][start];
-        mx_printint(distance);
+        mx_printint(next_distance);
+
+		distance += next_distance;
+		
         if (i < path_length - 2) {
             mx_printstr(" + ");
         }
