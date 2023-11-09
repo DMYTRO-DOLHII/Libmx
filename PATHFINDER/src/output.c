@@ -92,6 +92,10 @@ void output(Graph *graph, Island *islands, int **shortest_paths, int point_a, in
     }
 
     int *path = (int *)malloc(graph->num_vertices * sizeof(int));
+
+	path[1] = point_a;
+	path[0] = point_b;
+
     dfs(graph, islands, point_a, point_b, path, 0, shortest_paths);
     free(path);
 }
