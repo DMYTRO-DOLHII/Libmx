@@ -137,16 +137,16 @@ int main(int argc, char* argv[]) {
 		// ------ Get start index
 		int start_index = -1;
 		for (int i = 0; i < num_islands; i++) {
-			if (mx_strcmp(islands[i]->name, edge.start) == 0) {
+			if (mx_strcmp(islands[i].name, edge.start) == 0) {
                 start_index = i;
                 break;
             }
 		}
 
 		if (start_index == -1) {
-			mx_strcpy(islands[num_islands]->name, edge.start);
+			mx_strcpy(islands[num_islands].name, edge.start);
 			start_index = num_islands;
-			islands[num_islands]->index = start_index;
+			islands[num_islands].index = start_index;
 			num_islands++;
 		}
 
@@ -155,16 +155,16 @@ int main(int argc, char* argv[]) {
 		// ------ Get end index
 		int end_index = -1;
 		for (int i = 0; i < num_islands; i++) {
-			if (mx_strcmp(islands[i]->name, edge.end) == 0) {
+			if (mx_strcmp(islands[i].name, edge.end) == 0) {
                 end_index = i;
                 break;
             }
 		}
 
 		if (end_index == -1) {
-			mx_strcpy(islands[num_islands]->name, edge.end);
+			mx_strcpy(islands[num_islands].name, edge.end);
 			end_index = num_islands;
-			islands[num_islands]->index = end_index;
+			islands[num_islands].index = end_index;
 			num_islands++;
 		}
 
