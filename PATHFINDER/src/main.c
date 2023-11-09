@@ -74,46 +74,16 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    int fd = open(argv[1], O_RDONLY);
-    if (fd == -1) {
-        perror("Error: Cannot open file");
-        return 1;
-    }
+    char *file = mx_file_to_str(argv[1]);
 
-    // Read the number of vertices from the first line
-    char numVerticesStr[10]; // Assuming the number of vertices won't exceed 10 digits
-    ssize_t bytesRead = read(fd, numVerticesStr, sizeof(numVerticesStr));
-    if (bytesRead <= 0) {
-        perror("Error: Unable to read the number of vertices");
-        close(fd);
-        return 1;
-    }
+	char *line = mx_strtok((char*)file, "\n");
+	int verticies = mx_atoi(line);
 
-    int numVertices = atoi(numVerticesStr);
-    printf("Number of Vertices: %d\n", numVertices);
+	while((line = mx_strtok(NULL, "\n")) != NULL) {
+		mx_printstr(line);
+		mx_printstr("\n");
+	}
+    
 
-    // Read the file line by line to extract edges
-    char buffer[100];
-    while ((bytesRead = read(fd, buffer, sizeof(buffer))) > 0) {
-        buffer[bytesRead] = '\0'; // Null-terminate the buffer
-        char *line = buffer;
-
-        // Extract edges from the line and process them
-        char *dashPos = strtok(line, "-,");
-        char *start = dashPos;
-        dashPos = strtok(NULL, "-,");
-        char *end = dashPos;
-        char *weightStr = strtok(NULL, "-,\n");
-        int weight = atoi(weightStr);
-
-        // Process the extracted edge (start, end, weight)
-        printf("Edge: %s -> %s, Weight: %d\n", start, end, weight);
-    }
-
-    if (bytesRead == -1) {
-        perror("Error: Cannot read file");
-    }
-
-    close(fd);
     return 0;
 }

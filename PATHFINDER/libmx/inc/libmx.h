@@ -55,6 +55,7 @@ char *mx_strjoin(const char *s1, const char *s2);
 char *mx_file_to_str(const char *file);
 char *mx_replace_substr(const char *str, const char *sub, const char *replace);
 int mx_read_line(char **lineptr, size_t buf_size, char delim, const int file);
+int mx_sscanf(const char *str, const char *format, char *city1, char *city2, int *distance);
 
 void *mx_memset(void *b, int c, size_t len);
 void *mx_memcpy(void *restrict dst, const void *restrict src, size_t n);
