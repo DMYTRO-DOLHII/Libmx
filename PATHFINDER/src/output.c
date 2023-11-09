@@ -33,7 +33,7 @@ static void print_path(Island *islands, int *path, int path_length, Graph *graph
         mx_printint(next_distance);
 
 		distance += next_distance;
-		
+
         if (i < path_length - 2) {
             mx_printstr(" + ");
         }
@@ -46,16 +46,16 @@ static void print_path(Island *islands, int *path, int path_length, Graph *graph
     mx_printchar('\n');
 }
 
-static void dfs(Graph *graph, Island *islands, int current, int destination, int *path, int path_length) {
+static void dfs(Graph *graph, Island *islands, int current, int destination, int *path, int path_length, int **shortest_paths) {
     islands[current].visited = true;
     path[path_length] = current;
 
     if (current == destination) {
-        print_path(islands, path, path_length + 1, graph);
+        print_path(islands, path, path_length + 1, shortest_paths);
     } else {
         for (int i = 0; i < graph->num_vertices; ++i) {
             if (graph->adj_matrix[current][i] != 0 && !islands[i].visited) {
-                dfs(graph, islands, i, destination, path, path_length + 1);
+                dfs(graph, islands, i, destination, path, path_length + 1, shortest_paths);
             }
         }
     }
@@ -63,12 +63,19 @@ static void dfs(Graph *graph, Island *islands, int current, int destination, int
     islands[current].visited = false;
 }
 
-static void find_paths_between_points(Graph *graph, Island *islands, int point_a, int point_b) {
-    int *path = (int *)malloc(graph->num_vertices * sizeof(int));
-    dfs(graph, islands, point_a, point_b, path, 0);
-    free(path);
-}
+void output(Graph *graph, Island *islands, int **shortest_paths, int point_a, int point_b) {
+    if (point_a < 0 || point_a >= graph->num_vertices || point_b < 0 || point_b >= graph->num_vertices) {
+        return;
+    }
 
-void output(Graph *graph, Island *islands, int point_a, int point_b) {
-    find_paths_between_points(graph, islands, point_a, point_b);
+    int distance = shortest_paths[point_a][point_b];
+
+    if (distance == 0) {
+        mx_printstr("No path found between the points.\n");
+        return;
+    }
+
+    int *path = (int *)malloc(graph->num_vertices * sizeof(int));
+    dfs(graph, islands, point_a, point_b, path, 0, shortest_paths);
+    free(path);
 }
