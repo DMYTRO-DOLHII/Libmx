@@ -128,9 +128,6 @@ int main(int argc, char* argv[]) {
 			continue;
 		}
 
-		mx_printstr(line);
-		mx_printstr("\n");
-
 		Edge edge;
 
 		edge.start = mx_strdup(start);
@@ -181,7 +178,7 @@ int main(int argc, char* argv[]) {
 	floyd_warshall(graph, &shortest_pathes);
 
 	for (int i = 0; i < num_islands; i++) {
-		for (int j = i + 1; j < num_islands; j++) {
+		for (int j = 0; j < num_islands; j++) {
 			// output(graph, islands, i, j);
 			mx_printint(graph->adj_matrix[i][j]);
 			mx_printstr(" ");
@@ -198,6 +195,14 @@ int main(int argc, char* argv[]) {
 		}
 
 		mx_printstr("\n");
+	}
+
+	mx_printstr("\n\n\n");
+
+	for (int i = 0; i < num_islands; i++) {
+		for (int j = i + 1; j < num_islands; j++) {
+			output(graph, islands, i, j);
+		}
 	}
 
 	free(graph);
