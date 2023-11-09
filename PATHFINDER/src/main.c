@@ -111,7 +111,7 @@ int main(int argc, char* argv[]) {
 	char *line = mx_strtok((char*)file, "\n");
 	int verticies = mx_atoi(line);
 
-	Island* islands[verticies];
+	Island* islands = (Island*)malloc(verticies * sizeof(Island));
 	int num_islands = 0;
 
 	Graph* graph = create_graph(verticies);
@@ -150,6 +150,8 @@ int main(int argc, char* argv[]) {
 			num_islands++;
 		}
 
+		mx_printstr("--- Start index ---\n");
+
 		// ------ Get end index
 		int end_index = -1;
 		for (int i = 0; i < num_islands; i++) {
@@ -166,7 +168,7 @@ int main(int argc, char* argv[]) {
 			num_islands++;
 		}
 
-		mx_printstr("--- Iteration ---\n");
+		mx_printstr("--- End index ---\n");
 
 
 		graph->adj_matrix[start_index][end_index] = edge.weight;
