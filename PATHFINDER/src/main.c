@@ -80,7 +80,17 @@ int main(int argc, char* argv[]) {
 	int verticies = mx_atoi(line);
 
 	while((line = mx_strtok(NULL, "\n")) != NULL) {
-		mx_printstr(line);
+		char start[100];
+		char end[100];
+		int weight;
+
+		int r = mx_sscanf(line, "%s-%s,%d", start, end, &weight);
+
+		mx_printstr(start);
+		mx_printchar('-');
+		mx_printstr(end);
+		mx_printchar(',');
+		mx_printint(weight);
 		mx_printstr("\n");
 	}
     
