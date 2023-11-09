@@ -36,14 +36,14 @@ void floyd_warshall(Graph *graph, int ***shortest_paths) {
     for (int k = 0; k < num_vertices; ++k) {
         for (int i = 0; i < num_vertices; ++i) {
             for (int j = 0; j < num_vertices; ++j) {
-                if ((*shortest_paths)[i][k] != 0 && (*shortest_paths)[k][j] != 0) {
+                if ((*shortest_paths)[i][k] != INF && (*shortest_paths)[k][j] != INF) {
                     int new_dist = (*shortest_paths)[i][k] + (*shortest_paths)[k][j];
-                    if ((*shortest_paths)[i][j] == 0 || new_dist < (*shortest_paths)[i][j]) {
+                    if ((*shortest_paths)[i][j] == INF || new_dist < (*shortest_paths)[i][j]) {
                         (*shortest_paths)[i][j] = new_dist;
                     }
 
                     if (i == j) {
-                        (*shortest_paths)[i][j] = 0;
+                        (*shortest_paths)[i][j] = INF;
                     }
                 }
             }
