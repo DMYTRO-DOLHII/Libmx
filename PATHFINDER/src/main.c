@@ -19,12 +19,6 @@ typedef struct {
     int weight;
 } Edge;
 
-void mx_printstr(const char *str) {
-    while (*str) {
-        putchar(*str);
-        ++str;
-    }
-}
 
 Graph* create_graph(int num_vertices) {
     Graph *graph = (Graph*)malloc(sizeof(Graph));
@@ -79,10 +73,9 @@ int main(int argc, char* argv[]) {
 	char *line = mx_strtok((char*)file, "\n");
 	int verticies = mx_atoi(line);
 
-	mx_printint(verticies);
-	mx_printstr("\n");
+	Graph* graph = create_graph(verticies);
 
-	while((line = mx_strtok(NULL, "\n")) != NULL) {
+	while ((line = mx_strtok(NULL, "\n")) != NULL) {
 		char start[100];
 		char end[100];
 		int weight;
@@ -93,12 +86,13 @@ int main(int argc, char* argv[]) {
 			mx_printstr("Extraction failed...");
 		}
 
-		mx_printstr(start);
-		mx_printchar('-');
-		mx_printstr(end);
-		mx_printchar(',');
-		mx_printint(weight);
-		mx_printstr("\n");
+		Edge edge;
+
+		edge.start = mx_strdup(start);
+		edge.end = mx_strdup(end);
+		edge.weight = weight;
+
+		add_edge(graph, edge);
 	}
     
 
