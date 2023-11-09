@@ -7,44 +7,39 @@ static void print_separator(void) {
     mx_printchar('\n');
 }
 
-static void print_path(Island *islands, int *path, int path_length, Graph *graph) {
-    print_separator();
+static void print_path(int *path, int path_length, Island *islands, int **matrix) {
     mx_printstr("Path: ");
-    mx_printstr(islands[path[0]].name);
+    mx_printstr(islands[path[1]].name);
     mx_printstr(" -> ");
-    mx_printstr(islands[path[path_length - 1]].name);
-    mx_printchar('\n');
-
-    mx_printstr("Route: ");
     mx_printstr(islands[path[0]].name);
-    for (int i = 1; i < path_length; ++i) {
-        mx_printstr(" -> ");
-        mx_printstr(islands[path[i]].name);
-    }
     mx_printchar('\n');
+    mx_printstr("Route: ");
 
-    mx_printstr("Distance: ");
-    int distance = 0;
-    for (int i = 0; i < path_length - 1; ++i) {
-        int start = path[i];
-        int end = path[i + 1];
-        int next_distance = islands[start].index < islands[end].index ? 
-                    graph->adj_matrix[start][end] : graph->adj_matrix[end][start];
-        mx_printint(next_distance);
+    for (int i = 1; i < path_length + 1; i++) {
+        mx_printstr(islands[path[i]].name);
+        if (i < path_length) {
+            mx_printstr(" -> ");
+        }
+    }
 
-		distance += next_distance;
+    mx_printstr("\nDistance: ");
+    int path_dist = 0;
 
-        if (i < path_length - 2) {
+    for (int i = 1; i < path_length; i++) {
+        int between = matrix[path[i]][path[i + 1]];
+        mx_printint(between);
+        path_dist += between;
+        if (i < path_length - 1) {
             mx_printstr(" + ");
         }
     }
 
-    if (path_length > 2) {
+    if (path_length != 2) {
         mx_printstr(" = ");
-        mx_printint(distance);
+        mx_printint(path_dist);
     }
+
     mx_printchar('\n');
-	print_separator();
 }
 
 // static void dfs(Graph *graph, Island *islands, int current, int destination, int *path, int path_length, int **shortest_paths) {
@@ -81,7 +76,7 @@ static void dfs(Graph *graph, Island *islands, int current, int destination, int
 	if (path[path_length] != start) return;
 
 	print_separator();
-	print_path(islands, path, path_length, graph);
+	print_path(path, path_length, islands, graph->adj_matrix);
 	print_separator();
 }
 
