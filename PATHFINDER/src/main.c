@@ -144,13 +144,11 @@ int main(int argc, char* argv[]) {
 		}
 
 		if (start_index == -1) {
-			mx_strcpy(islands[num_islands].name, edge.start);
+			islands[num_islands].name = mx_strdup(edge.start);
 			start_index = num_islands;
 			islands[num_islands].index = start_index;
 			num_islands++;
 		}
-
-		mx_printstr("--- Start index ---\n");
 
 		// ------ Get end index
 		int end_index = -1;
@@ -162,18 +160,19 @@ int main(int argc, char* argv[]) {
 		}
 
 		if (end_index == -1) {
-			mx_strcpy(islands[num_islands].name, edge.end);
+			islands[num_islands].name = mx_strdup(edge.start);
 			end_index = num_islands;
 			islands[num_islands].index = end_index;
 			num_islands++;
 		}
 
-		mx_printstr("--- End index ---\n");
 
 
 		graph->adj_matrix[start_index][end_index] = edge.weight;
 		graph->adj_matrix[end_index][start_index] = edge.weight;
 	}
+
+	floyd_warshall(graph);
 
 	for (int i = 0; i < verticies; i++) {
 		for (int j = 0; j < verticies; j++) {
