@@ -149,20 +149,17 @@ static void invalid_islands_error(char *argv[]) {;
             continue;
         }
 
-
-		Edge edge;
-
 		// ------ Get start index
 		int start_index = -1;
 		for (int i = 0; i < num_islands; i++) {
-			if (mx_strcmp(islands[i].name, edge.start) == 0) {
+			if (mx_strcmp(islands[i].name, start) == 0) {
                 start_index = i;
                 break;
             }
 		}
 
 		if (start_index == -1) {
-			islands[num_islands].name = mx_strdup(edge.start);
+			islands[num_islands].name = mx_strdup(start);
 			start_index = num_islands;
 			islands[num_islands].index = start_index;
 			num_islands++;
@@ -171,14 +168,14 @@ static void invalid_islands_error(char *argv[]) {;
 		// ------ Get end index
 		int end_index = -1;
 		for (int i = 0; i < num_islands; i++) {
-			if (mx_strcmp(islands[i].name, edge.end) == 0) {
+			if (mx_strcmp(islands[i].name, end) == 0) {
                 end_index = i;
                 break;
             }
 		}
 
 		if (end_index == -1) {
-			islands[num_islands].name = mx_strdup(edge.end);
+			islands[num_islands].name = mx_strdup(end);
 			end_index = num_islands;
 			islands[num_islands].index = end_index;
 			num_islands++;
