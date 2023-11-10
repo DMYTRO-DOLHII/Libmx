@@ -10,7 +10,6 @@
 typedef struct {
     char *name;
     int index;
-	bool visited;
 } Island;
 
 typedef struct {

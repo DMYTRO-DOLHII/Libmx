@@ -1,6 +1,6 @@
 #include "../inc/pathfinder.h"
 
-
+// ------------------------------------------------
 static void usage_error(int argc, char *argv[]) {
     if (argc != 2) {
         mx_printstr("usage: ");
@@ -9,7 +9,10 @@ static void usage_error(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 }
+// ------------------------------------------------
 
+
+// ------------------------------------------------
 static void file_not_exist_error(char *argv[]) {
 	int descriptor = open(argv[1], O_RDONLY);
 
@@ -22,7 +25,10 @@ static void file_not_exist_error(char *argv[]) {
 
 	close(descriptor);
 }
+// ------------------------------------------------
 
+
+// ------------------------------------------------
 static void empty_file_error(char *argv[]) {
     int descriptor = open(argv[1], O_RDONLY);
 
@@ -38,7 +44,10 @@ static void empty_file_error(char *argv[]) {
 
     close(descriptor);
 }
+// ------------------------------------------------
 
+
+// ------------------------------------------------
 static void invalid_first_line_error(char *argv[]) {
     char *str = mx_file_to_str(argv[1]);
     char **strarr = mx_strsplit(str, '\n');
@@ -57,7 +66,10 @@ static void invalid_first_line_error(char *argv[]) {
     mx_strdel(&str);
     mx_del_strarr(&strarr);
 }
+// ------------------------------------------------
 
+
+// ------------------------------------------------
 static void check_line(char *str, int index) {
     for (int i = 0; i < mx_strlen(str); i++) {
         if (!mx_isalpha(str[i])) {
@@ -113,11 +125,158 @@ void invalid_line_error(char *argv[]) {
         mx_del_strarr(&str_arr);
     }
 }
+// ------------------------------------------------
 
 
+// ------------------------------------------------
+static int size_strarr(char **strarr) {
+    int size = 0;
+    for (int i = 0; strarr[i]; i++) {
+        size++;
+    }
+    return size;
+}
 
+void invalid_islands_error(char *argv[]) {;
+    char *str = mx_file_to_str(argv[1]);
+    char **strarr = mx_strsplit(str, '\n');
+    char **check_arr = vertex_extraction(str, (size_strarr(strarr) * 2));
+
+    if (size_strarr(check_arr) != mx_atoi(strarr[0])) {
+        mx_printerr("error: invalid number of islands\n");
+        exit(-1);
+    }
+
+    mx_strdel(&str);
+    mx_del_strarr(&strarr);
+    mx_del_strarr(&check_arr);
+}
+// ------------------------------------------------
+
+
+// ------------------------------------------------
+static void duplicate_bridges_error(char *argv[]) {
+    char *file_content = mx_file_to_str(argv[1]);
+    char *line = mx_strtok(file_content, "\n");
+
+
+    // Skip the first line
+    for (int i = 1; i <= mx_atoi(line); ++i) {
+        line = mx_strtok(NULL, "\n");
+        if (!line) {
+            // Free the allocated memory
+            free(file_content);
+            return; // No error if there are fewer lines than expected
+        }
+    }
+
+    // Create a matrix to keep track of bridges
+    int verticies = mx_atoi(line);
+
+	Island* islands = (Island*)malloc(verticies * sizeof(Island));
+
+    int **bridges_matrix = (int **)malloc(verticies * sizeof(int *));
+    for (int i = 0; i < verticies; ++i) {
+        bridges_matrix[i] = (int *)malloc(verticies * sizeof(int));
+        for (int j = 0; j < verticies; ++j) {
+            bridges_matrix[i][j] = 0;
+        }
+    }
+
+    // Check for duplicate bridges
+    while ((line = mx_strtok(NULL, "\n")) != NULL) {
+        char start[100];
+        char end[100];
+        int weight;
+
+        int r = mx_sscanf(line, "%s-%s,%d", start, end, &weight);
+
+        if (r != 3) {
+            // Handle extraction failure
+            mx_printstr("Extraction failed...");
+            // Free the allocated memory
+            free(file_content);
+            for (int i = 0; i < verticies; ++i) {
+                free(bridges_matrix[i]);
+            }
+            free(bridges_matrix);
+            exit(EXIT_FAILURE);
+        }
+
+        // Check for duplicate bridges
+        int start_index = -1;
+        int end_index = -1;
+        for (int i = 0; i < verticies; ++i) {
+            if (mx_strcmp(islands[i].name, start) == 0) {
+                start_index = i;
+            }
+            if (mx_strcmp(islands[i].name, end) == 0) {
+                end_index = i;
+            }
+        }
+
+        if (bridges_matrix[start_index][end_index] == 1 || bridges_matrix[end_index][start_index] == 1) {
+            mx_printstr("error: duplicate bridges\n");
+            // Free the allocated memory
+            free(file_content);
+            for (int i = 0; i < verticies; ++i) {
+                free(bridges_matrix[i]);
+            }
+            free(bridges_matrix);
+            exit(EXIT_FAILURE);
+        }
+
+        bridges_matrix[start_index][end_index] = 1;
+        bridges_matrix[end_index][start_index] = 1;
+    }
+
+    // Free the allocated memory
+    free(file_content);
+    for (int i = 0; i < verticies; ++i) {
+        free(bridges_matrix[i]);
+    }
+    free(bridges_matrix);
+	free(islands);
+}
+// ------------------------------------------------
+
+
+// ------------------------------------------------
+void sum_of_lengths_error(char *argv[]) {
+    char *str = mx_file_to_str(argv[1]);
+    long long int sum = 0;
+    long long int max_length = INT_MAX;
+
+    char* token = mx_strtok(str, ",");
+    int first = 1;
+
+    while(token != NULL) {
+        if(first) {
+            first = 0;
+        } else {
+            sum += mx_atoll(token);
+        }
+
+        token = mx_strtok(NULL, ",\n");
+    }
+    
+    if (sum > max_length) {
+        mx_printerr("error: sum of bridges lengths is too big");
+        exit(1);
+    }
+}
+// ------------------------------------------------
+
+// ------------------------------------------------
 void errors(int argc, char *argv[]) {
 	usage_error(argc, argv);
 	file_not_exist_error(argv);
 	empty_file_error(argv);
+	invalid_first_line_error(argv);
+	invalid_line_error(argv);
+	invalid_islands_error(argv);
+	duplicate_bridges_error(argv);
+	sum_of_lengths_error(argv);
 }
+// ------------------------------------------------
+
