@@ -253,7 +253,7 @@ static void duplicate_bridges_error(char *argv[]) {
         if (bridges_matrix[start_index][end_index] == 1 || bridges_matrix[end_index][start_index] == 1) {
             mx_printstr("error: duplicate bridges\n");
             // Free the allocated memory
-            free(file_content);
+            free(content);
             for (int i = 0; i < verticies; ++i) {
                 free(bridges_matrix[i]);
             }
