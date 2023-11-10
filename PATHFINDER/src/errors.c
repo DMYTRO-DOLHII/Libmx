@@ -12,6 +12,6 @@ static void usage_error(int argc, char *argv[]) {
 
 
 
-void errros(int argc, char *argv[]) {
+void errors(int argc, char *argv[]) {
 	usage_error(argc, argv);
 }
