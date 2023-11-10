@@ -42,24 +42,6 @@ static void print_path(int *path, int path_length, Island *islands, int **matrix
     mx_printchar('\n');
 }
 
-// static void dfs(Graph *graph, Island *islands, int current, int destination, int *path, int path_length, int **shortest_paths) {
-//     islands[current].visited = true;
-//     path[path_length] = current;
-
-//     if (current == destination) {
-//         print_path(islands, path, path_length + 1, graph);
-// 		return;
-//     } else {
-//         for (int i = 0; i < graph->num_vertices; ++i) {
-//             if (graph->adj_matrix[current][i] != INF && !islands[i].visited) {
-//                 dfs(graph, islands, i, destination, path, path_length + 1, shortest_paths);
-//             }
-//         }
-//     }
-
-// 	islands[current].visited = false;
-// }
-
 static void dfs(int **matrix, int **shortest_paths, int *path, int path_length, int size, Island *islands) {
 	int start = path[0];
 	int end = path[path_length];
