@@ -129,15 +129,7 @@ void invalid_line_error(char *argv[]) {
 
 
 // ------------------------------------------------
-static int size_strarr(char **strarr) {
-    int size = 0;
-    for (int i = 0; strarr[i]; i++) {
-        size++;
-    }
-    return size;
-}
-
-void invalid_islands_error(char *argv[]) {;
+static void invalid_islands_error(char *argv[]) {;
     char *content = mx_file_to_str(argv[1]);
 	char *line = mx_strtok(content, "\n");
 
@@ -274,7 +266,7 @@ static void duplicate_bridges_error(char *argv[]) {
     }
 
     // Free the allocated memory
-    free(file_content);
+    free(content);
     for (int i = 0; i < verticies; ++i) {
         free(bridges_matrix[i]);
     }
