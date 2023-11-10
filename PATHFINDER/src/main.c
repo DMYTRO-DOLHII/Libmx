@@ -50,6 +50,7 @@ void floyd_warshall(Graph *graph, int ***shortest_paths) {
 
 
 int main(int argc, char* argv[]) {
+	errors(argc, argv);
 
     char *file = mx_file_to_str(argv[1]);
 
