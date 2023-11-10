@@ -11,12 +11,16 @@ static void usage_error(int argc, char *argv[]) {
 }
 
 static void file_not_exist_error(char *argv[]) {
-    if (!mx_file_exists(argv[1])) {
+	int descriptor = open(argv[1], O_RDONLY);
+
+    if (descriptor == -1) {
         mx_printstr("error: file ");
         mx_printstr(argv[1]);
         mx_printstr(" does not exist\n");
         exit(EXIT_FAILURE);
     }
+
+	close(descriptor);
 }
 
 static void empty_file_error(char *argv[]) {
@@ -37,6 +41,6 @@ static void empty_file_error(char *argv[]) {
 
 void errors(int argc, char *argv[]) {
 	usage_error(argc, argv);
-	file_not_exist_error(argc, argv);
-	empty_file_error(argc, argv);
+	file_not_exist_error(argv);
+	empty_file_error(argv);
 }
