@@ -10,7 +10,7 @@ static void usage_error(int argc, char *argv[]) {
     }
 }
 
-static file_not_exist_error(int argc, char *argv[]) {
+static void file_not_exist_error(char *argv[]) {
     if (!mx_file_exists(argv[1])) {
         mx_printstr("error: file ");
         mx_printstr(argv[1]);
@@ -19,7 +19,7 @@ static file_not_exist_error(int argc, char *argv[]) {
     }
 }
 
-static void empty_file_error(int argc, char *argv[]) {
+static void empty_file_error(char *argv[]) {
     char *file_content = mx_file_to_str(argv[1]);
 
     if (file_content[0] == '\0') {
