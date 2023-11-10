@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
 	output(graph->adj_matrix, shortest_paths, graph->num_vertices, islands);
 
 	free(graph);
-    
+    free(islands);
 
     return 0;
 }

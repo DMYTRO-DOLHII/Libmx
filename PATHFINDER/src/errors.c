@@ -138,40 +138,91 @@ static int size_strarr(char **strarr) {
 }
 
 void invalid_islands_error(char *argv[]) {;
-    char *str = mx_file_to_str(argv[1]);
-    char **strarr = mx_strsplit(str, '\n');
-    char **check_arr = vertex_extraction(str, (size_strarr(strarr) * 2));
+    char *content = mx_file_to_str(argv[1]);
+	char *line = mx_strtok(content, "\n");
 
-    if (size_strarr(check_arr) != mx_atoi(strarr[0])) {
+    int verticies = mx_atoi(line);
+
+	Island* islands = (Island*)malloc(verticies * sizeof(Island));
+	int num_islands = 0;
+
+	while ((line = mx_strtok(NULL, "\n")) != NULL) {
+        char start[100];
+        char end[100];
+        int weight;
+
+        int r = mx_sscanf(line, "%s-%s,%d", start, end, &weight);
+
+        if (r != 3) {
+            continue;
+        }
+
+
+		Edge edge;
+
+		// ------ Get start index
+		int start_index = -1;
+		for (int i = 0; i < num_islands; i++) {
+			if (mx_strcmp(islands[i].name, edge.start) == 0) {
+                start_index = i;
+                break;
+            }
+		}
+
+		if (start_index == -1) {
+			islands[num_islands].name = mx_strdup(edge.start);
+			start_index = num_islands;
+			islands[num_islands].index = start_index;
+			num_islands++;
+		}
+
+		// ------ Get end index
+		int end_index = -1;
+		for (int i = 0; i < num_islands; i++) {
+			if (mx_strcmp(islands[i].name, edge.end) == 0) {
+                end_index = i;
+                break;
+            }
+		}
+
+		if (end_index == -1) {
+			islands[num_islands].name = mx_strdup(edge.end);
+			end_index = num_islands;
+			islands[num_islands].index = end_index;
+			num_islands++;
+		}
+
+    }
+
+    if (verticies != num_islands) {
         mx_printerr("error: invalid number of islands\n");
         exit(-1);
     }
 
-    mx_strdel(&str);
-    mx_del_strarr(&strarr);
-    mx_del_strarr(&check_arr);
+    free(islands);
 }
 // ------------------------------------------------
 
 
 // ------------------------------------------------
 static void duplicate_bridges_error(char *argv[]) {
-    char *file_content = mx_file_to_str(argv[1]);
-    char *line = mx_strtok(file_content, "\n");
+    char *content = mx_file_to_str(argv[1]);
+    char *line = mx_strtok(content, "\n");
+
+    int verticies = mx_atoi(line);
 
 
     // Skip the first line
-    for (int i = 1; i <= mx_atoi(line); ++i) {
+    for (int i = 1; i <= verticies; ++i) {
         line = mx_strtok(NULL, "\n");
         if (!line) {
             // Free the allocated memory
-            free(file_content);
+            free(content);
             return; // No error if there are fewer lines than expected
         }
     }
 
     // Create a matrix to keep track of bridges
-    int verticies = mx_atoi(line);
 
 	Island* islands = (Island*)malloc(verticies * sizeof(Island));
 
@@ -192,15 +243,7 @@ static void duplicate_bridges_error(char *argv[]) {
         int r = mx_sscanf(line, "%s-%s,%d", start, end, &weight);
 
         if (r != 3) {
-            // Handle extraction failure
-            mx_printstr("Extraction failed...");
-            // Free the allocated memory
-            free(file_content);
-            for (int i = 0; i < verticies; ++i) {
-                free(bridges_matrix[i]);
-            }
-            free(bridges_matrix);
-            exit(EXIT_FAILURE);
+            continue;
         }
 
         // Check for duplicate bridges
