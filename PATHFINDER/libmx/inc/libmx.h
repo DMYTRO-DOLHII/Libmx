@@ -21,7 +21,6 @@ unsigned long mx_hex_to_nbr(const char *hex);
 int mx_atoi(const char *str);
 long long mx_atoll(const char *str);
 char *mx_itoa(int number);
-int mx_index(char **strarr, char *str);
 bool mx_isdigit(int c);
 int mx_isalpha(int c);
 char *mx_strtok(char *str, const char *delim);
