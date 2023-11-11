@@ -23,6 +23,7 @@ typedef struct {
     int weight;
 } Edge;
 
+Graph* create_graph(int num_vertices);
 int mx_sscanf(const char *str, const char *format, char *start, char *end, int *weight);
 void output(int **matrix, int **shortest_paths, int size, Island *islands);
 void errors(int argc, char *argv[]);

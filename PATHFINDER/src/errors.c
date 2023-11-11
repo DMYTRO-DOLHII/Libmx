@@ -197,22 +197,10 @@ static void invalid_islands_error(char *argv[]) {;
 static void duplicate_bridges_error(char *argv[]) {
     char *content = mx_file_to_str(argv[1]);
     char *line = mx_strtok(content, "\n");
-
     int verticies = mx_atoi(line);
 
 
-    // Skip the first line
-    for (int i = 1; i <= verticies; ++i) {
-        line = mx_strtok(NULL, "\n");
-        if (!line) {
-            // Free the allocated memory
-            free(content);
-            return; // No error if there are fewer lines than expected
-        }
-    }
-
-    // Create a matrix to keep track of bridges
-
+    Graph* graph = create_graph(verticies);
 	Island* islands = (Island*)malloc(verticies * sizeof(Island));
 	int num_islands = 0;
 
@@ -224,7 +212,7 @@ static void duplicate_bridges_error(char *argv[]) {
         }
     }
 
-    // Check for duplicate bridges
+	// Fill adjecency matrix
     while ((line = mx_strtok(NULL, "\n")) != NULL) {
         char start[100];
         char end[100];
@@ -268,31 +256,30 @@ static void duplicate_bridges_error(char *argv[]) {
 			num_islands++;
 		}
 
-        // ------ Check for duplicate bridges
-        int start_index = -1;
-        int end_index = -1;
-        for (int i = 0; i < verticies; ++i) {
-            if (mx_strcmp(islands[i].name, start) == 0) {
-                start_index = i;
-            }
-            if (mx_strcmp(islands[i].name, end) == 0) {
-                end_index = i;
-            }
+		graph->adj_matrix[start_index][end_index] = weight;
+		graph->adj_matrix[end_index][start_index] = weight;
+    }
+
+	// Check for duplicate bridges
+	char **strarr = mx_strsplit(line, '\n');
+    for (int i = 1; strarr[i]; i++) {
+        char *start = mx_strndup(strarr[i], mx_get_char_index(strarr[i], '-'));
+        strarr[i] += mx_get_char_index(strarr[i], '-') + 1;
+        
+        char *end = mx_strndup(strarr[i], mx_get_char_index(strarr[i], ','));
+        strarr[i] += mx_get_char_index(strarr[i], ',') + 1;
+        
+
+        if (bridges_matrix[mx_get_index(graph->adj_matrix, start)][mx_get_index(graph->adj_matrix, end)] == 1 &&
+			bridges_matrix[mx_get_index(graph->adj_matrix, end)][mx_get_index(graph->adj_matrix, start)] == 1) {
+            mx_printerr("error: duplicate bridges\n");
+            exit(-1);
         }
 
-        if (bridges_matrix[start_index][end_index] == 1 || bridges_matrix[end_index][start_index] == 1) {
-            mx_printstr("error: duplicate bridges\n");
-            // Free the allocated memory
-            free(content);
-            for (int i = 0; i < verticies; ++i) {
-                free(bridges_matrix[i]);
-            }
-            free(bridges_matrix);
-            exit(EXIT_FAILURE);
-        }
-
-        bridges_matrix[start_index][end_index] = 1;
-        bridges_matrix[end_index][start_index] = 1;
+        bridges_matrix[mx_get_index(graph->adj_matrix, start)][mx_get_index(graph->adj_matrix, end)] = 1;
+        bridges_matrix[mx_get_index(graph->adj_matrix, end)][mx_get_index(graph->adj_matrix, start)] = 1;
+        mx_strdel(&start);
+        mx_strdel(&end);
     }
 
     // Free the allocated memory
