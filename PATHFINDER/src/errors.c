@@ -266,18 +266,17 @@ static void duplicate_bridges_error(char *argv[]) {
 
 	content = mx_file_to_str(argv[1]);
     line = mx_strtok(content, "\n");
-    int verticies = mx_atoi(line);
 
     while ((line = mx_strtok(NULL, "\n")) != NULL) {
-        char* token = mx_strtok(line, "-,");
-		char* start = mx_strdup(token);
+        char start[100];
+		char end[100];
+		int weight;
 
-		token = mx_strtok(line, "-,");
-		char* end = mx_strdup(token);
+		int r = mx_sscanf(line, "%s-%s,%d", start, end, &weight);
 
-		mx_printstr(start);
-		mx_printstr(end);
-		mx_printstr("\n");
+		if (r != 3) {
+			continue;
+		}
         
 
         if (bridges_matrix[island_index(islands, num_islands, start)][island_index(islands, num_islands, end)] == 1 &&
@@ -288,8 +287,6 @@ static void duplicate_bridges_error(char *argv[]) {
 
         bridges_matrix[island_index(islands, num_islands, start)][island_index(islands, num_islands, end)] = 1;
         bridges_matrix[island_index(islands, num_islands, end)][island_index(islands, num_islands, start)] = 1;
-        mx_strdel(&start);
-        mx_strdel(&end);
     }
 
     // Free the allocated memory
