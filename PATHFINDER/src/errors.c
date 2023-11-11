@@ -214,6 +214,7 @@ static void duplicate_bridges_error(char *argv[]) {
     // Create a matrix to keep track of bridges
 
 	Island* islands = (Island*)malloc(verticies * sizeof(Island));
+	int num_islands = 0;
 
     int **bridges_matrix = (int **)malloc(verticies * sizeof(int *));
     for (int i = 0; i < verticies; ++i) {
@@ -235,7 +236,39 @@ static void duplicate_bridges_error(char *argv[]) {
             continue;
         }
 
-        // Check for duplicate bridges
+		// ------ Get start index
+		int start_index = -1;
+		for (int i = 0; i < num_islands; i++) {
+			if (mx_strcmp(islands[i].name, start) == 0) {
+                start_index = i;
+                break;
+            }
+		}
+
+		if (start_index == -1) {
+			islands[num_islands].name = mx_strdup(start);
+			start_index = num_islands;
+			islands[num_islands].index = start_index;
+			num_islands++;
+		}
+
+		// ------ Get end index
+		int end_index = -1;
+		for (int i = 0; i < num_islands; i++) {
+			if (mx_strcmp(islands[i].name, end) == 0) {
+                end_index = i;
+                break;
+            }
+		}
+
+		if (end_index == -1) {
+			islands[num_islands].name = mx_strdup(end);
+			end_index = num_islands;
+			islands[num_islands].index = end_index;
+			num_islands++;
+		}
+
+        // ------ Check for duplicate bridges
         int start_index = -1;
         int end_index = -1;
         for (int i = 0; i < verticies; ++i) {
