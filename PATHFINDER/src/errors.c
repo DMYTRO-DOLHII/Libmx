@@ -263,11 +263,15 @@ static void duplicate_bridges_error(char *argv[]) {
 	// Check for duplicate bridges
 	char **strarr = mx_strsplit(line, '\n');
     for (int i = 1; strarr[i]; i++) {
-        char *start = mx_strndup(strarr[i], mx_get_char_index(strarr[i], '-'));
-        strarr[i] += mx_get_char_index(strarr[i], '-') + 1;
-        
-        char *end = mx_strndup(strarr[i], mx_get_char_index(strarr[i], ','));
-        strarr[i] += mx_get_char_index(strarr[i], ',') + 1;
+        char* token = mx_strtok(line, "-,");
+		char* start = mx_strdup(token);
+
+		token = mx_strtok(line, "-,");
+		char* end = mx_strdup(token);
+
+		mx_printstr(start);
+		mx_printstr(end);
+		mx_printstr("\n");
         
 
         if (bridges_matrix[island_index(islands, num_islands, start)][island_index(islands, num_islands, end)] == 1 &&
