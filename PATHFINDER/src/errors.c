@@ -320,7 +320,7 @@ void sum_of_lengths_error(char *argv[]) {
     }
     
     if (sum > max_length) {
-        mx_printerr("error: sum of bridges lengths is too big");
+        mx_printerr("error: sum of bridges lengths is too big\n");
         exit(1);
     }
 }
