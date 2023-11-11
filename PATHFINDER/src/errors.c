@@ -260,9 +260,15 @@ static void duplicate_bridges_error(char *argv[]) {
 		graph->adj_matrix[end_index][start_index] = weight;
     }
 
+	free(content);
 	// Check for duplicate bridges
-	char **strarr = mx_strsplit(line, '\n');
-    for (int i = 1; strarr[i]; i++) {
+
+
+	content = mx_file_to_str(argv[1]);
+    line = mx_strtok(content, "\n");
+    int verticies = mx_atoi(line);
+
+    while ((line = mx_strtok(NULL, "\n")) != NULL) {
         char* token = mx_strtok(line, "-,");
 		char* start = mx_strdup(token);
 
