@@ -270,14 +270,14 @@ static void duplicate_bridges_error(char *argv[]) {
         strarr[i] += mx_get_char_index(strarr[i], ',') + 1;
         
 
-        if (bridges_matrix[mx_get_index(graph->adj_matrix, start)][mx_get_index(graph->adj_matrix, end)] == 1 &&
-			bridges_matrix[mx_get_index(graph->adj_matrix, end)][mx_get_index(graph->adj_matrix, start)] == 1) {
+        if (bridges_matrix[mx_index(graph->adj_matrix, start)][mx_index(graph->adj_matrix, end)] == 1 &&
+			bridges_matrix[mx_index(graph->adj_matrix, end)][mx_index(graph->adj_matrix, start)] == 1) {
             mx_printerr("error: duplicate bridges\n");
             exit(-1);
         }
 
-        bridges_matrix[mx_get_index(graph->adj_matrix, start)][mx_get_index(graph->adj_matrix, end)] = 1;
-        bridges_matrix[mx_get_index(graph->adj_matrix, end)][mx_get_index(graph->adj_matrix, start)] = 1;
+        bridges_matrix[mx_index(graph->adj_matrix, start)][mx_index(graph->adj_matrix, end)] = 1;
+        bridges_matrix[mx_index(graph->adj_matrix, end)][mx_index(graph->adj_matrix, start)] = 1;
         mx_strdel(&start);
         mx_strdel(&end);
     }
