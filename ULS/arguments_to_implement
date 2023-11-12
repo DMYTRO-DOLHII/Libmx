@@ -1,0 +1,20 @@
+[ ] -l: Long format, displaying detailed information.
+[ ] -a: Include entries starting with a dot (hidden files).
+[ ] -R: Recursive listing of subdirectories.
+[ ] -h: Human-readable file sizes (e.g., KB, MB, GB).
+[ ] -t: Sort by modification time, newest first.
+[ ] -S: Sort by file size.
+[ ] -r: Reverse the order of the sort.
+[ ] -g: Similar to -l, but exclude owner information.
+[ ] -1: Force output to be one entry per line.
+[ ] -i: Display the inode number of each file.
+[ ] -G: Enable colorized output.
+[ ] -U: Do not sort; list entries in directory order.
+[ ] -d: List directories themselves, not their contents.
+[ ] -F: Append indicator (one of /=@|) to entries.
+[ ] -c: Use time of last change instead of last modification.
+[ ]-u: Use time of last access instead of last modification.
+[ ] -q: Force printing of non-graphic characters in file names as the character ?.
+[ ] -A: List all entries except for . and ...
+[ ] --color: Enable colorized output (alternative to -G).
+
