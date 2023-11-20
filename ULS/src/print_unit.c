@@ -41,3 +41,29 @@ void print_unit(const char *unit, char *color) {
     mx_printstr("  ");
 }
 
+void print_unit_info(Unit *unit) {
+    mx_printchar(unit->type);
+    mx_printstr(unit->permissions);
+    mx_printstr(" ");
+    mx_printstr(unit->owner);
+    mx_printstr(" ");
+    mx_printstr(unit->group);
+    mx_printstr(" ");
+
+    // Convert size to string using mx_itoa
+    mx_printstr(mx_itoa(unit->size));
+
+    mx_printstr(" ");
+
+    mx_printstr(unit->modification_time);
+    mx_printstr(" ");
+    mx_printstr(unit->name);
+
+    // Print symlink information if it exists
+    if (unit->symlink != NULL) {
+        mx_printstr(" -> ");
+        mx_printstr(unit->symlink);
+    }
+
+    mx_printstr("\n");
+}

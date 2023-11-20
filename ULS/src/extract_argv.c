@@ -31,119 +31,120 @@ int extract_options(int argc, char *argv[], Option *options) {
 }
 
 int extract_destiations(int argc, char *argv[], Destination *destinations) {
-    int num_units = 0;
+    int num_destinations = 0;
 
     for (int i = 1; i < argc; i++) {
         if (argv[i][0] != '-') {
-            destinations[num_units++].name = mx_strndup(argv[i] + 1, strlen(argv[i]) - 1);
+            destinations[num_destinations++].name = mx_strdup(argv[i]);
         }
     }
 
-    return num_units;
+    return num_destinations;
 }
 
-void enable_flags(Option *options, int size, Flag flag) {
+void enable_flags(Option *options, int size, Flag *flag) {
     for (int i = 0; i < size; i++) {
-        switch (options[i].name)
-        {
+        switch (options[i].name) {
         case 'a':
-            flag.a = true;
+            flag->a = true;
+            flag->A = false;
             break;
         case 'A':
-            flag.A = true;
+            flag->A = true;
+            flag->a = false;
             break;
         case 'l':
-            flag.l = true;
-            flag.C = false;
-            flag.one = false;
+            flag->l = true;
+            flag->C = false;
+            flag->one = false;
             break;
         case 'r':
-            flag.r = true;
+            flag->r = true;
             break;
         case 'R':
-            flag.R = true;
+            flag->R = true;
             break;
         case 't':
-            flag.t = true;
+            flag->t = true;
             break;
         case 'u':
-            flag.u = true;
+            flag->u = true;
             break;
         case 'c':
-            flag.c = true;
+            flag->c = true;
             break;
         case 'G':
-            flag.G = true;
+            flag->G = true;
             break;
         case 'h':
-            flag.h = true;
+            flag->h = true;
             break;
         case 'e':
-            flag.e = true;
+            flag->e = true;
             break;
         case 'i':
-            flag.i = true;
+            flag->i = true;
             break;
         case 'S':
-            flag.S = true;
+            flag->S = true;
             break;
         case 'T':
-            flag.T = true;
+            flag->T = true;
             break;
         case 'x':
-            flag.x = true;
+            flag->x = true;
             break;
         case 'p':
-            flag.p = true;
+            flag->p = true;
             break;
         case 'd':
-            flag.d = true;
+            flag->d = true;
             break;
         case 'f':
-            flag.f = true;
+            flag->f = true;
             break;
         case 'n':
-            flag.n = true;
+            flag->n = true;
             break;
         case 'g':
-            flag.g = true;
+            flag->g = true;
             break;
         case 'o':
-            flag.o = true;
+            flag->o = true;
             break;
         case 'L':
-            flag.L = true;
+            flag->L = true;
             break;
         case 'F':
-            flag.F = true;
+            flag->F = true;
             break;
         case '1':
-            flag.one = true;
-            flag.C = false;
-            flag.l = false;
+            flag->one = true;
+            flag->C = false;
+            flag->l = false;
             break;
         case '@':
-            flag.at = true;
+            flag->at = true;
             break;
         case 'C':
-            flag.C = true;
-            flag.one = false;
-            flag.l = false;
+            flag->C = true;
+            flag->one = false;
+            flag->l = false;
             break;
         case 'B':
-            flag.B = true;
+            flag->B = true;
             break;
         case 's':
-            flag.s = true;
+            flag->s = true;
             break;
         case 'X':
-            flag.X = true;
+            flag->X = true;
             break;
         case 'v':
-            flag.v = true;
+            flag->v = true;
             break;
         case 'w':
-            flag.w = true;
+            flag->w = true;
             break;
         default:
             mx_printerr("Unrecognized flag: ");

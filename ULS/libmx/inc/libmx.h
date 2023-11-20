@@ -67,8 +67,7 @@ void *mx_memmem(const void *big, size_t big_len, const void *little, size_t litt
 void *mx_memmove(void *dst, const void *src, size_t len);
 void *mx_realloc(void *ptr, size_t size);
 
-typedef struct s_list
-{
+typedef struct s_list {
 	void *data;
 	struct s_list *next;
 } t_list;

@@ -29,6 +29,8 @@
 
 #define ALL_OPTIONS "lRartuUcCbDdfgGhHiIkklmnopqQrsTtuvwxX1@"
 
+#define __USE_XOPEN_EXTENDED 500
+
 
 typedef struct {
     char name;
@@ -98,13 +100,16 @@ typedef struct {
 
 void print_unit_color(const char *unit, mode_t mode);
 void print_unit(const char *unit, char *color);
+void print_unit_info(Unit *unit);
 void default_colorful_output();
 void default_output();
 
 int extract_options(int argc, char *argv[], Option *Options);
 int extract_destiations(int argc, char *argv[], Destination *destinations);
-void enable_flags(Option *options, int size, Flag flag);
+void enable_flags(Option *options, int size, Flag *flag);
 
+Directory open_dir(char *name, Flag flag);
+Directory open_dir_destinations(char *name, Destination *destinations, int size);
 void custom_qsort(void *base, size_t num_elements, size_t element_size, int (*comparator)(const void *, const void *));
 
 
