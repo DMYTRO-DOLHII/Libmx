@@ -63,19 +63,19 @@ char *format_time(const struct stat *file_stat) {
 
 
 static char *get_pemissions(mode_t mode) {
-    char permission[11];
+    char permission[10];
 
-    permission[0] = S_ISDIR(mode) ? 'd' : '-';
-    permission[1] = mode & S_IRUSR ? 'r' : '-';
-    permission[2] = mode & S_IWUSR ? 'w' : '-';
-    permission[3] = mode & S_IXUSR ? 'x' : '-';
-    permission[4] = mode & S_IRGRP ? 'r' : '-';
-    permission[5] = mode & S_IWGRP ? 'w' : '-';
-    permission[6] = mode & S_IXGRP ? 'x' : '-';
-    permission[7] = mode & S_IROTH ? 'r' : '-';
-    permission[8] = mode & S_IWOTH ? 'w' : '-';
-    permission[9] = mode & S_IXOTH ? 'x' : '-';
-    permission[10] = '\0';
+    // permission[0] = S_ISDIR(mode) ? 'd' : '-';
+    permission[0] = mode & S_IRUSR ? 'r' : '-';
+    permission[1] = mode & S_IWUSR ? 'w' : '-';
+    permission[2] = mode & S_IXUSR ? 'x' : '-';
+    permission[3] = mode & S_IRGRP ? 'r' : '-';
+    permission[4] = mode & S_IWGRP ? 'w' : '-';
+    permission[5] = mode & S_IXGRP ? 'x' : '-';
+    permission[6] = mode & S_IROTH ? 'r' : '-';
+    permission[7] = mode & S_IWOTH ? 'w' : '-';
+    permission[8] = mode & S_IXOTH ? 'x' : '-';
+    permission[9] = '\0';
 
     return mx_strdup(permission);
 }

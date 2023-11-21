@@ -1,6 +1,6 @@
 #include "../inc/uls.h"
 
-void default_colorful_output() {
+void default_colorful_output(void) {
     DIR *dir = opendir(".");
     if (!dir) {
         perror("opendir");
@@ -26,7 +26,7 @@ void default_colorful_output() {
     closedir(dir);
 }
 
-void default_output() {
+void default_output(void) {
     DIR *dir = opendir(".");
 
     if (!dir) {

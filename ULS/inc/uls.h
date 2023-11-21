@@ -30,6 +30,8 @@
 #define ALL_OPTIONS "lRartuUcCbDdfgGhHiIkklmnopqQrsTtuvwxX1@"
 
 #define __USE_XOPEN_EXTENDED 500
+#define __USE_XOPEN2K 2001
+#define _POSIX_C_SOURCE 200112L
 
 
 typedef struct {
