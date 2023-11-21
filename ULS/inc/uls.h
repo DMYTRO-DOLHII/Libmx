@@ -103,8 +103,6 @@ typedef struct {
 void print_unit_color(const char *unit, mode_t mode);
 void print_unit(const char *unit, char *color);
 void print_unit_info(Unit *unit);
-void default_colorful_output();
-void default_output();
 
 int extract_options(int argc, char *argv[], Option *Options);
 int extract_destiations(int argc, char *argv[], Destination *destinations);
