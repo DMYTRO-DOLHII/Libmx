@@ -4,7 +4,6 @@
 #include "../libmx/inc/libmx.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <dirent.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -29,9 +28,9 @@
 
 #define ALL_OPTIONS "lRartuUcCbDdfgGhHiIkklmnopqQrsTtuvwxX1@"
 
-#define __USE_XOPEN_EXTENDED 500
-#define __USE_XOPEN2K 2001
-#define _POSIX_C_SOURCE 200112L
+#define ACL_TYPE_EXTENDED   0x00000100
+#define XATTR_NOFOLLOW      0x0001
+
 
 
 typedef struct {
@@ -42,8 +41,9 @@ typedef struct {
     char *name;
 } Destination;
 
-// TODO: change back to char var[N]
+
 typedef struct {
+    unsigned long inode;
     char *name;
     char type;
     char *permissions;
@@ -51,8 +51,10 @@ typedef struct {
     char *owner;
     char *group;
     long size;
-    char *modification_time;
+    char *h_size;
+    char *date_time;
     char *symlink;
+    char **xattr_keys;
 } Unit;
 
 typedef struct {
@@ -99,10 +101,18 @@ typedef struct {
     bool Q; 
 } Flag;
 
+typedef struct {
+    int nlinks;
+    int username;
+    int groupname;
+    int size;
+    int h_size;
+} Max_Size;
 
-void print_unit_color(const char *unit, mode_t mode);
+
 void print_unit(const char *unit, char *color);
-void print_unit_info(Unit *unit);
+void print_unit_info(Unit *unit, Max_Size *max_size, Flag *flag);
+void print_long_list(Directory *current, Flag *flag);
 
 int extract_options(int argc, char *argv[], Option *Options);
 int extract_destiations(int argc, char *argv[], Destination *destinations);

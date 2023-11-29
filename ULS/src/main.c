@@ -8,10 +8,10 @@ static void uls(Directory current_dir, Flag flag) {
     if(flag.R) {
         // uls_recursive(current_dir, flag);
     } else {
-        for (int i = 0; i < current_dir.units_count; i++) {
-            if (flag.l) {
-                print_unit_info(&current_dir.units[i]);
-            } else {
+        if (flag.l) {
+            print_long_list(&current_dir, &flag);
+        } else {
+            for (int i = 0; i < current_dir.units_count; i++){
                 print_unit(current_dir.units[i].name, DEFAULT_COLOR);
             }
         }
@@ -39,20 +39,6 @@ int main(int argc, char *argv[]) {
     }
 
     uls(start_point, flag);
-
-    // for (int i = 0; i < start_point.units_count; i++) {
-    //     if (!flag.G) {
-    //         print_unit(start_point.units[i].name, DEFAULT_COLOR);
-    //     }
-    //     else {
-    //         if (start_point.units[i].type == 'd') {
-    //             print_unit(start_point.units[i].name, BLUE_COLOR);
-    //         }
-    //         else {
-    //             print_unit(start_point.units[i].name, DEFAULT_COLOR);
-    //         }
-    //     }
-    // }
 
     mx_printstr("\n");
 

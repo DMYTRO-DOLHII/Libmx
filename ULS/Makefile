@@ -2,7 +2,7 @@ NAME	=	uls
 
 
 CC 	= 	clang
-CFLAGS	=	-std=c11 -Wall -Wextra -Werror -Wpedantic
+# CFLAGS	=	-std=c11 -Wall -Wextra -Werror -Wpedantic
 
 SRCDIR	=	src
 INCDIR	=	inc

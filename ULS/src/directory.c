@@ -62,8 +62,8 @@ char *format_time(const struct stat *file_stat) {
 }
 
 
-static char *get_pemissions(mode_t mode) {
-    char permission[10];
+static char *get_pemissions(mode_t mode, char *name) {
+    char permission[11];
 
     // permission[0] = S_ISDIR(mode) ? 'd' : '-';
     permission[0] = mode & S_IRUSR ? 'r' : '-';
@@ -75,7 +75,8 @@ static char *get_pemissions(mode_t mode) {
     permission[6] = mode & S_IROTH ? 'r' : '-';
     permission[7] = mode & S_IWOTH ? 'w' : '-';
     permission[8] = mode & S_IXOTH ? 'x' : '-';
-    permission[9] = '\0';
+    permission[9] = (getxattr(name, "user.", NULL, XATTR_NOFOLLOW) > 0) ? "@" : (acl_get_file(name, ACL_TYPE_EXTENDED) != NULL) ? "+" : " ";
+    permission[10] = '\0';
 
     return mx_strdup(permission);
 }
@@ -88,12 +89,12 @@ static void set_unit(Unit *unit, struct dirent *entry, struct stat file_stat) {
     else if (S_ISFIFO(file_stat.st_mode)) unit->type = 'p';
     else if (S_ISBLK(file_stat.st_mode)) unit->type = 'b';
     else unit->type = '-';
-    unit->permissions = get_pemissions(file_stat.st_mode);
+    unit->permissions = get_pemissions(file_stat.st_mode, entry->d_name);
     unit->nlinks = file_stat.st_nlink;
     unit->owner = getpwuid(file_stat.st_uid)->pw_name;
     unit->group = getgrgid(file_stat.st_gid)->gr_name;
     unit->size = file_stat.st_size;
-    unit->modification_time = "TIME";
+    unit->date_time = "TIME";
     unit->nlinks = file_stat.st_nlink;
     // symlink
     if (S_ISLNK(file_stat.st_mode)) {
@@ -139,7 +140,7 @@ Directory open_dir(char *name, Flag flag) {
     while ((entry = readdir(dir)) != NULL) {
 
         struct stat file_stat;
-        if (stat(entry->d_name, &file_stat) == -1) {
+        if (lstat(entry->d_name, &file_stat) == -1) {
             perror("Error getting file stat");
             continue;
         }
@@ -186,7 +187,7 @@ Directory open_dir_destinations(char *name, Destination *destinations, int size)
 
         while ((entry = readdir(dir)) != NULL) {
             struct stat file_stat;
-            if (stat(entry->d_name, &file_stat) == -1) {
+            if (lstat(entry->d_name, &file_stat) == -1) {
                 perror("Error getting file stat");
                 continue;
             }
