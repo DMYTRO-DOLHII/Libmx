@@ -1,21 +1,25 @@
-#include <libmx.h>
-
-static bool is_space(char c) {
-    return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\r' || c == '\f');
-}
+#include "libmx.h"
 
 char *mx_strtrim(const char *str) {
-    if(str) {
-        int len = 0;
-        char *new = NULL;
-
-        while (is_space(*str))
-            str++;
-        len = mx_strlen(str);
-        while (len > 0 && is_space(str[len - 1]))
-            len--;
-        new = mx_strndup(str, len);
-        return new;
+    if (str == NULL) {
+        return NULL;
     }
-    return NULL;
+
+    while (mx_isspace(*str)) {
+        str++;
+    }
+
+    int len = mx_strlen(str);
+
+    if (len != 0) {
+        while (mx_isspace(str[len - 1])) {
+            len--;
+        }
+    }
+
+    char *new_str = mx_strnew(len);
+    mx_strncpy(new_str, str, len);
+
+    return new_str;
 }
+

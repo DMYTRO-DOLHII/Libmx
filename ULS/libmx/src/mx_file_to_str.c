@@ -1,30 +1,60 @@
-#include <libmx.h>
+#include "libmx.h"
 
-char *mx_file_to_str(const char *file){
-
-    int file_opened = open(file, O_RDONLY);
-
-    if(file_opened == -1){
-        close(file_opened);
+char *mx_file_to_str(const char *file) {
+    if (file == NULL) {
         return NULL;
     }
 
-    int read_fl = 0;
-    int len = 0;
+    int file_descr = open(file, O_RDONLY);
+
+    if (file_descr == -1) {
+        return NULL;
+    }
+
+    int size = 0;
+    int byte_count;
     char c;
-    read_fl = read(file_opened, &c, 1);
-    while (read_fl > 0) {
-        read_fl = read(file_opened, &c, 1);
-        len++;
-    }
-    close(file_opened);
 
-    file_opened = open(file, O_RDONLY);
-    if(!len)
+    while((byte_count = read(file_descr, &c, 1)) != 0) {
+        if (byte_count == -1) {
+            return NULL;
+        }
+
+        size++;
+    }
+
+    if (size == 0) {
         return NULL;
-    
-    char *res = mx_strnew(len);
-    read(file_opened, res, len);
-    close(file_opened);
-    return res;
+    }
+
+    if (close(file_descr) == -1) {
+        return NULL;
+    }
+
+    file_descr = open(file, O_RDONLY);
+
+    if (file_descr == -1) {
+        return NULL;
+    }
+
+    char *str = mx_strnew(size);
+    int i = 0;
+
+    while ((byte_count = read(file_descr, &c, 1)) != 0) {
+        if (byte_count == -1) {
+            return NULL;
+        }
+
+        str[i] = c;
+        i++;
+    }
+
+    if (close(file_descr) == -1) {
+        return NULL;
+    }
+
+    str[i] = '\0';
+
+    return str;
 }
+

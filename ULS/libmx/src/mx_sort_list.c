@@ -1,22 +1,27 @@
-#include <libmx.h>
+#include "libmx.h"
 
-t_list *mx_sort_list(t_list *list, bool (*cmp)(void *a, void *b)) {
-    t_list *help = NULL;
-    t_list *store = list;
-    t_list *tmp = list;
-    void *swap_data;
-
-    while (list) {
-        help = store;
-        while (help) {
-            if (help->next && cmp(help->data, help->next->data)) {
-                swap_data = help->data;
-                help->data = help->next->data;
-                help->next->data = swap_data;
-            }
-            help = help->next;
-        }
-        list = list->next;
+t_list *mx_sort_list(t_list *lst, bool (*cmp)(void *, void *)) {
+    if (lst == NULL
+        || cmp == NULL) {
+        return lst;
     }
-    return tmp;
+
+    int size = mx_list_size(lst);
+
+    for (int i = 0; i < size; i++) {
+        t_list *current_list = lst;
+
+        for (int j = 0; j < size - 1; j++) {
+            if (cmp(current_list->data, current_list->next->data)) {
+                void *temp = current_list->data;
+                current_list->data = current_list->next->data;
+                current_list->next->data = temp;
+            }
+
+            current_list = current_list->next;
+        }
+    }
+
+    return lst;
 }
+

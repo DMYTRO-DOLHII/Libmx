@@ -1,60 +1,39 @@
-NAME	=	uls
+INCD = inc
+OBJD = obj
+SRCD = src
+LIBD = libmx
+LIB = $(LIBD)/libmx.a
+EXE = uls
+SRCS := $(wildcard $(SRCD)/*.c)
+OBJS := $(patsubst $(SRCD)/%.c, $(OBJD)/%.o, $(SRCS))
+CC = clang
+CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic
 
-
-CC 	= 	clang
-# CFLAGS	=	-std=c11 -Wall -Wextra -Werror -Wpedantic
-
-SRCDIR	=	src
-INCDIR	=	inc
-OBJDIR	=	obj
-
-LMXDIR	=	libmx
-LMXA:=	$(LMXDIR)/libmx.a
-LMXINC:=	$(LMXDIR)/inc
-
-INC		=	uls.h
-INCS	=	$(addprefix $(INCDIR)/, $(INC))
-
-SRCS	=	$(wildcard $(SRCDIR)/*.c)
-OBJS	=	$(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRCS))
-
-CLEAR = \r\33[2K
-GREEN = \033[32;1m
-YELLOW = \033[33;1m
-RED = \033[31;1m
-NORMAL = \033[0m
+.PHONY: all install clean uninstall reinstall
 
 all: install
 
-install: $(LMXA) $(NAME)
+install: $(LIB) $(EXE)
 
-$(NAME): $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) -L$(LMXDIR) -lmx -o $@
-	@printf "${CLEAR}$@ ${GREEN}created${NORMAL}\n"
+$(LIB):
+	make -C $(LIBD)
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCS)
-	@$(CC) $(CFLAGS) -c $< -o $@ -I$(INCDIR) -I$(LMXINC)
-	@printf "${CLEAR}$(NAME) ${YELLOW}compile ${NORMAL}$(<:$(SRCDIR)/%.c=%) "	
+$(EXE): $(OBJS)
+	$(CC) $(CFLAGS) -I$(INCD) $^ $(LIB) -o $@
 
-$(OBJS): | $(OBJDIR)
+$(OBJS): $(OBJD)/%.o: $(SRCD)/%.c | $(OBJD)
+	$(CC) $(CFLAGS) -I$(INCD) -I$(LIBD)/$(INCD) -c $< -o $@
 
-$(OBJDIR):
-	@mkdir -p $@
-
-$(LMXA):
-	@make -sC $(LMXDIR)
-	
-clean:
-	@make -sC $(LMXDIR) $@
-	@rm -rf $(OBJDIR)
-	@printf "$(OBJDIR)\t   $(RED)deleted$(NORMAL)\n"
+$(OBJD):
+	mkdir -p $(OBJD)
 
 uninstall: clean
-	@make -sC $(LMXDIR) $@
-	@rm -rf $(NAME)
-	@printf "$(NAME) ${RED}uninstalled${NORMAL}\n"
+	rm -f $(EXE)
+	make -C $(LIBD) uninstall
 
-reinstall: uninstall install
+clean:
+	rm -rf $(OBJD)
+	make -C $(LIBD) clean
 
-start: install
-	./$(NAME) test/test
+reinstall: uninstall all
+

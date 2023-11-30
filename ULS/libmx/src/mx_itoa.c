@@ -1,44 +1,43 @@
-#include <libmx.h>
+#include "libmx.h"
 
-char* mx_itoa(int number) {
-    if (number == -2147483648) {
-        return "-2147483648";
+static int number_length(int number) {
+    int i = 0;
+
+    while (number) {
+        number /= 10;
+        i++;
     }
-    
-    int maxDigits = 1;
+
+    return i;
+}
+
+char *mx_itoa(int number) {
+    int length = number_length(number);
+    char *string = NULL;
+    string = mx_strnew(length);
+
+    if (number == 0) {
+        return mx_strcpy(string, "0");
+    }
+
+    if (number == -2147483648) {
+        return mx_strcpy(string, "-2147483648");
+    }
+
     int temp = number;
-    while (temp / 10 != 0) {
-        maxDigits++;
+
+    for (int i = 0; i < length; i++) {
+        if (temp < 0) {
+            string[length] = '-';
+            temp = -temp;
+        }
+
+        string[i] = (temp % 10) + '0';
         temp /= 10;
     }
 
-    char* result = (char*)malloc((maxDigits + 1) * sizeof(char));
-    if (result == NULL) {
-        return NULL;
-    }
+    mx_str_reverse(string);
 
-    int i = 0;
-    if (number < 0) {
-        result[i++] = '-';
-        number = -number;
-    }
-
-    do {
-        result[i++] = '0' + (number % 10);
-        number /= 10;
-    } while (number > 0);
-
-    result[i] = '\0';
-
-    int start = (result[0] == '-') ? 1 : 0;
-    int end = i - 1;
-    while (start < end) {
-        char temp = result[start];
-        result[start] = result[end];
-        result[end] = temp;
-        start++;
-        end--;
-    }
-
-    return result;
+    return string;
 }
+

@@ -1,30 +1,28 @@
-#include <libmx.h>
+#include "libmx.h"
 
 char *mx_replace_substr(const char *str, const char *sub, const char *replace) {
-	if (str == NULL || sub == NULL || replace == NULL) {
+    if (str == NULL
+        || sub == NULL
+        || replace == NULL) {
         return NULL;
     }
 
-    int str_len = mx_strlen(str);
-    int sub_len = mx_strlen(sub);
+    int length_diff = mx_strlen(replace) - mx_strlen(sub);
+    int new_length = mx_strlen(str) + mx_count_substr(str, sub) * length_diff;
+    char *new_str = mx_strnew(new_length);
 
-    if (str_len == 0 || sub_len == 0) {
-        return mx_strdup(str);
-    }
+    for (int i = 0; i < new_length; i++, str++) {
+        if (mx_strncmp((char *)str, (char *)sub, mx_strlen(sub)) == 0) {
+            str += mx_strlen(sub);
 
-    char *result = mx_strnew(0);
-
-    int i = 0;
-    while (i < str_len) {
-        if (mx_strncmp(&str[i], sub, sub_len) == 0) {
-            result = mx_strcat(result, replace);
-            i += sub_len;
-        } else {
-            char tmp[2] = {str[i], '\0'};
-            result = mx_strcat(result, tmp);
-            i++;
+            for (int j = 0; j < mx_strlen(replace); i++, j++) {
+                new_str[i] = replace[j];
+            }
         }
+
+        new_str[i] = *str;
     }
 
-    return result;
+    return new_str;
 }
+

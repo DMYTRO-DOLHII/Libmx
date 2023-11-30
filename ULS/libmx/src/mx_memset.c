@@ -1,12 +1,12 @@
-#include <libmx.h>
+#include "libmx.h"
 
 void *mx_memset(void *b, int c, size_t len) {
     unsigned char *ptr = (unsigned char *)b;
-    unsigned char value = (unsigned char)c;
 
     for (size_t i = 0; i < len; i++) {
-        *ptr++ = value;
+        ptr[i] = (unsigned char)c;
     }
 
     return b;
 }
+

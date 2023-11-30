@@ -1,34 +1,32 @@
+INCD = inc
+OBJD = obj
+SRCD = src
+LIBMX = libmx.a
+SRCS := $(wildcard $(SRCD)/*.c)
+OBJS := $(patsubst $(SRCD)/%.c, $(OBJD)/%.o, $(SRCS))
 CC = clang
 CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic
 
-INCDIR = inc
-SRCDIR = src
-OBJDIR = obj
-
-SRCFS := $(wildcard $(SRCDIR)/*.c)
-OBJFS := $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRCFS))
-
-LIB = libmx.a
-
-.PHONY: all install uninstall clean reinstall
+.PHONY: all install clean uninstall clean reinstall
 
 all: install
 
-install: $(LIB)
+install: $(LIBMX)
 
-$(LIB): $(OBJDIR) $(OBJFS)
-	ar rsc $(LIB) $(OBJFS)
+$(LIBMX): $(OBJD) $(OBJS)
+	ar rsc $(LIBMX) $(OBJS)
 
-$(OBJDIR):
-	mkdir $(OBJDIR)
+$(OBJD):
+	mkdir -p $(OBJD)
 
-$(OBJDIR)/%.o:$(SRCDIR)/%.c
-	$(CC) $(CFLAGS) -I $(INCDIR) -c $< -o $@
+$(OBJD)/%.o: $(SRCD)/%.c
+	$(CC) $(CFLAGS) -I $(INCD) -c $< -o $@
 
 uninstall: clean
-	rm -f $(LIB)
+	rm -f $(LIBMX)
 
 clean:
-	rm -rf $(OBJDIR)
+	rm -rf $(OBJD)
 
 reinstall: uninstall all
+

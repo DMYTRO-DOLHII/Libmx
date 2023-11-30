@@ -1,46 +1,38 @@
-#include "../inc/uls.h"
+#include "uls.h"
 
-// static void uls_recursive(Directory current_dir, Flag flag) {
 
-// }
 
-static void uls(Directory current_dir, Flag flag) {
-    if(flag.R) {
-        // uls_recursive(current_dir, flag);
-    } else {
-        if (flag.l) {
-            print_long_list(&current_dir, &flag);
-        } else {
-            for (int i = 0; i < current_dir.units_count; i++){
-                print_unit(current_dir.units[i].name, DEFAULT_COLOR);
-            }
-        }
-    }
 
-}
+
+
+
 
 int main(int argc, char *argv[]) {
-    Flag flag = {false};
-    Option *options = (Option *)malloc(sizeof(Option));
-    Destination *destinations = (Destination *)malloc(sizeof(Destination));
 
-    int num_options = extract_options(argc, argv, options);
-    int num_destinations = extract_destiations(argc, argv, destinations);
+    t_list *elements = mx_take_elements(argc, argv);
 
-    enable_flags(options, num_options, &flag);
+    int val1 = mx_validate_elements(elements);
 
-    Directory start_point;
-
-    if (num_destinations != 0) {
-        start_point = open_dir_destinations(".", destinations, num_destinations);
-    }
-    else {
-        start_point = open_dir(".", flag);
+    if (val1 < 0)
+    {
+        return -1;
     }
 
-    uls(start_point, flag);
+    t_flags *flags = mx_init_flags(argc, argv);
 
-    mx_printstr("\n");
+    int val2 = 0;
+    val2 = mx_validate_flags(flags); 
 
-    return 0;
+    if (val2 < 0)
+    {
+        return -1;
+    }
+
+    int result = mx_output_elements(elements, flags);
+
+    mx_clear_list(&elements);
+    
+    free(flags);
+
+    return result;
 }

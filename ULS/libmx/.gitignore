@@ -1,0 +1,11 @@
+.DS_Store$
+._.DS_Store$
+.idea
+.git
+*.o
+*.gch
+*.out
+*.a
+obj
+test_files
+libmx.a
