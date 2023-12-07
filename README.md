@@ -32,19 +32,11 @@ int main() {
 ```
 
 ## How to Compile
-To compile your C code with libmx, include the library during the compilation process. For example, if your source file is main.c:
-
-```c
-gcc main.c -o my_program
+```bash
+make
 ```
 
-This command links your code with libmx (-L. specifies the current directory, and -lmx links with libmx) and creates an executable named my_program.
-
-## Contributing
-Contributions are welcome! If you find any issues or have improvements to suggest, please create an issue or a pull request.
-
-
-
+-------------------------------------------------------------------------------------------------------------------------------------------------------
 # Pathfinder
 Pathfinder is a C-based project designed to parse files containing graph data, create an adjacency matrix to represent the relationships between nodes, and perform pathfinding operations. The project offers functionality to store the matrix, find the shortest path from one point (A) to another (B), as well as identify alternative routes.
 
@@ -64,11 +56,12 @@ Pathfinder is a C-based project designed to parse files containing graph data, c
 3. Run ./pathfinder. Test files located in /PATHFINDER/test/
    ```./pathfinder test/easy```
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # uls
 uls is a C-based implementation inspired by the Unix command ls. It is designed to list information about files and directories in a user-friendly and customizable manner.
 
-##Features
+## Features
 - Directory Listing: uls provides a clear and organized listing of files and directories within a specified directory.
 - File Information: Detailed information about each file, including permissions, owner, size, and modification time, is displayed for comprehensive file analysis.
 - Sorting Options: Users can customize the display by sorting files based on various criteria, such as name, size, or modification time.
